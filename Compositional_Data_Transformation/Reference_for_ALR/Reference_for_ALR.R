@@ -10,6 +10,10 @@ library(ggplot2)
 
 load("physeq.RData")
 
+replace_zeros <- function(data, replace_value = 0.5) {
+  data[data == 0] <- replace_value
+  return(data)
+}
 
 filter_rows <- function(data) {
   filtered_data <- data[apply(data, 1, function(row) {
@@ -17,20 +21,34 @@ filter_rows <- function(data) {
   }), ]
   return(filtered_data)
 }
-otu_table_data <- otu_table(physeq.tree)
-otu_table_transposed <- t(filter_rows(otu_table_data))
-otu_table_transposed <- as.matrix(otu_table_transposed)
-otu_table_compositional <- otu_table_transposed / rowSums(otu_table_transposed)
-data = as.data.frame(otu_table(otu_table_compositional))
-filtered_df <- data %>%
-  filter(grepl("\\.MD", rownames(data)))
-df <- filtered_df %>%
-  mutate(Group = case_when(
-    grepl("^LTS", rownames(.)) ~ "A",
-    grepl("^STS", rownames(.)) ~ "B"
-  ))
-df_0 <- df %>%
-  select(Group, everything())
+
+# Remove outliers
+remove_outliers <- function(df, group_col = "Group") {
+  remove_outliers_from_column <- function(x) {
+    non_zero_values <- x[x != 0]
+    log_values <- (non_zero_values)
+    Q1 <- quantile(log_values, 0.25, na.rm = TRUE)
+    Q3 <- quantile(log_values, 0.75, na.rm = TRUE)
+    IQR <- Q3 - Q1
+    lower_bound <- Q1 - 1.5 * IQR
+    upper_bound <- Q3 + 1.5 * IQR
+    
+    filtered_values <- non_zero_values[log_values >= lower_bound & log_values <= upper_bound]
+    result <- x
+    result[x != 0] <- ifelse(x[x != 0] %in% filtered_values, x[x != 0], NA)
+    return(result)
+  }
+  df_cleaned <- df %>%
+    group_by_at(group_col) %>%
+    mutate(across(where(is.numeric), ~ remove_outliers_from_column(.))) %>%
+    ungroup()
+  
+  return(df_cleaned)
+}
+
+
+
+
 
 # Get significant by using deseq2
 otu_data <- as.data.frame(otu_table(physeq.tree))
@@ -54,35 +72,9 @@ significant_results <- res %>%
   filter(padj < 0.05)
 deseq2_significant <- as.vector(significant_results["OTU"])$OTU
 
-# Remove outliers
-remove_outliers <- function(df, group_col = "Group") {
-  remove_outliers_from_column <- function(x) {
-    non_zero_values <- x[x != 0]
-    log_values <- log(non_zero_values)
-    Q1 <- quantile(log_values, 0.25, na.rm = TRUE)
-    Q3 <- quantile(log_values, 0.75, na.rm = TRUE)
-    IQR <- Q3 - Q1
-    lower_bound <- Q1 - 1.5 * IQR
-    upper_bound <- Q3 + 1.5 * IQR
-    
-    filtered_values <- non_zero_values[log_values >= lower_bound & log_values <= upper_bound]
-    result <- x
-    result[x != 0] <- ifelse(x[x != 0] %in% filtered_values, x[x != 0], NA)
-    return(result)
-  }
-  df_cleaned <- df %>%
-    group_by_at(group_col) %>%
-    mutate(across(where(is.numeric), ~ remove_outliers_from_column(.))) %>%
-    ungroup()
-  
-  return(df_cleaned)
-}
 
-# Replace 0
-replace_zeros <- function(data, replace_value = 1e-5) {
-  data[data == 0] <- replace_value
-  return(data)
-}
+
+
 
 # ALR Transformation
 alr_transformation <- function(data, group_factor = 1, ref_component) {
@@ -102,7 +94,31 @@ alr_transformation <- function(data, group_factor = 1, ref_component) {
 }
 
 # Test significant for ALR Transformation
-## Situation 1: replace 0 with 1e-5, without remove outliers
+## Situation 1: replace 0 with 0.5, without remove outliers
+otu_table_data <- otu_table(physeq.tree)
+otu_table_transposed <- t(filter_rows(otu_table_data))
+data = as.data.frame(otu_table_transposed)
+filtered_df <- data %>%
+  filter(grepl("\\.MD", rownames(data)))
+df <- filtered_df %>%
+  mutate(Group = case_when(
+    grepl("^LTS", rownames(.)) ~ "A",
+    grepl("^STS", rownames(.)) ~ "B"
+  ))
+df_0 <- df %>%
+  select(Group, everything())
+df_cleaned <- (df_0)
+
+
+otu_table_compositional <- df_cleaned %>%
+  select(-Group) %>%
+  as.matrix()
+otu_table_compositional <- replace_zeros(otu_table_compositional) / rowSums(replace_zeros(otu_table_compositional),na.rm = TRUE)
+otu_table_compositional <- as.data.frame(otu_table_compositional)
+otu_table_compositional$Group <- df_cleaned$Group
+otu_table_compositional <- otu_table_compositional %>%
+  select(Group, everything())
+
 identify_significant_columns <- function(data, group_factor = 1) {
   results <- data.frame(Reference = integer(), SignificantColumns = character(), stringsAsFactors = FALSE)
   num_cols <- ncol(data) - 1
@@ -127,7 +143,7 @@ identify_significant_columns <- function(data, group_factor = 1) {
   
   return(results)
 }
-df <- replace_zeros(df_0)
+df <- (otu_table_compositional)
 significant_columns_results <- identify_significant_columns(df, group_factor = 1)
 
 
@@ -163,34 +179,34 @@ g <- ggplot(plot_df, aes(x = Column, y = Reference, fill = Color)) +
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1), aspect.ratio = 1)
 plot_width <- 10
 plot_height <- 10
-ggsave(g, file = "Different_Reference_for_ALR_10e-5_outlier.eps", device = "eps", width = plot_width, height = plot_height)
+ggsave(g, file = "Different_Reference_for_ALR_05_outlier.eps", device = "eps", width = plot_width, height = plot_height)
 
-## Situation 2: replace 0 with 1e-5, remove outliers
-identify_significant_columns <- function(data, group_factor = 1) {
-  results <- data.frame(Reference = integer(), SignificantColumns = character(), stringsAsFactors = FALSE)
-  num_cols <- ncol(data) - 1
-  
-  for (ref_component in 1:num_cols) {
-    transformed_data <- alr_transformation(data, group_factor, ref_component)
-    
-    group1_data <- transformed_data %>% filter(Group == unique(transformed_data$Group)[1])
-    group2_data <- transformed_data %>% filter(Group == unique(transformed_data$Group)[2])
-    
-    p_values <- sapply(2:ncol(transformed_data), function(col_index) {
-      if (col_index == ref_component + 1) {
-        return(NA)
-      } else {
-        t.test(group1_data[[col_index]], group2_data[[col_index]])$p.value
-      }
-    })
-    significant_cols <- which(p.adjust(p_values, method = "BH", n = length(p_values)) < 0.05)
-    
-    results <- rbind(results, data.frame(Reference = ref_component, SignificantColumns = paste(significant_cols, collapse = ", ")))
-  }
-  
-  return(results)
-}
-df <- replace_zeros(remove_outliers(df_0))
+## Situation 2: replace 0 with 0.5, remove outliers
+otu_table_data <- otu_table(physeq.tree)
+otu_table_transposed <- t(filter_rows(otu_table_data))
+data = as.data.frame(otu_table_transposed)
+filtered_df <- data %>%
+  filter(grepl("\\.MD", rownames(data)))
+df <- filtered_df %>%
+  mutate(Group = case_when(
+    grepl("^LTS", rownames(.)) ~ "A",
+    grepl("^STS", rownames(.)) ~ "B"
+  ))
+df_0 <- df %>%
+  select(Group, everything())
+df_cleaned <- remove_outliers(df_0)
+
+
+otu_table_compositional <- df_cleaned %>%
+  select(-Group) %>%
+  as.matrix()
+otu_table_compositional <- replace_zeros(otu_table_compositional) / rowSums(replace_zeros(otu_table_compositional),na.rm = TRUE)
+otu_table_compositional <- as.data.frame(otu_table_compositional)
+otu_table_compositional$Group <- df_cleaned$Group
+otu_table_compositional <- otu_table_compositional %>%
+  select(Group, everything())
+
+df <- (otu_table_compositional)
 significant_columns_results <- identify_significant_columns(df, group_factor = 1)
 
 
@@ -226,34 +242,36 @@ g <- ggplot(plot_df, aes(x = Column, y = Reference, fill = Color)) +
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1), aspect.ratio = 1)
 plot_width <- 10
 plot_height <- 10
-ggsave(g, file = "Different_Reference_for_ALR_10e-5_no_outlier.eps", device = "eps", width = plot_width, height = plot_height)
+ggsave(g, file = "Different_Reference_for_ALR_05_no_outlier.eps", device = "eps", width = plot_width, height = plot_height)
 
-## Situation 3: replace 0 with 1e-10, without remove outliers
-identify_significant_columns <- function(data, group_factor = 1) {
-  results <- data.frame(Reference = integer(), SignificantColumns = character(), stringsAsFactors = FALSE)
-  num_cols <- ncol(data) - 1
-  
-  for (ref_component in 1:num_cols) {
-    transformed_data <- alr_transformation(data, group_factor, ref_component)
-    
-    group1_data <- transformed_data %>% filter(Group == unique(transformed_data$Group)[1])
-    group2_data <- transformed_data %>% filter(Group == unique(transformed_data$Group)[2])
-    
-    p_values <- sapply(2:ncol(transformed_data), function(col_index) {
-      if (col_index == ref_component + 1) {
-        return(NA)
-      } else {
-        t.test(group1_data[[col_index]], group2_data[[col_index]])$p.value
-      }
-    })
-    significant_cols <- which(p.adjust(p_values, method = "BH", n = length(p_values)) < 0.05)
-    
-    results <- rbind(results, data.frame(Reference = ref_component, SignificantColumns = paste(significant_cols, collapse = ", ")))
-  }
-  
-  return(results)
-}
-df <- replace_zeros(df_0, 1e-10)
+## Situation 3: replace 0 with 1, without remove outliers
+
+otu_table_data <- otu_table(physeq.tree)
+otu_table_transposed <- t(filter_rows(otu_table_data))
+data = as.data.frame(otu_table_transposed)
+filtered_df <- data %>%
+  filter(grepl("\\.MD", rownames(data)))
+df <- filtered_df %>%
+  mutate(Group = case_when(
+    grepl("^LTS", rownames(.)) ~ "A",
+    grepl("^STS", rownames(.)) ~ "B"
+  ))
+df_0 <- df %>%
+  select(Group, everything())
+df_cleaned <- (df_0)
+
+
+otu_table_compositional <- df_cleaned %>%
+  select(-Group) %>%
+  as.matrix()
+otu_table_compositional <- replace_zeros(otu_table_compositional, 1) / rowSums(replace_zeros(otu_table_compositional, 1),na.rm = TRUE)
+otu_table_compositional <- as.data.frame(otu_table_compositional)
+otu_table_compositional$Group <- df_cleaned$Group
+otu_table_compositional <- otu_table_compositional %>%
+  select(Group, everything())
+
+
+df <- otu_table_compositional
 significant_columns_results <- identify_significant_columns(df, group_factor = 1)
 
 
@@ -289,35 +307,36 @@ g <- ggplot(plot_df, aes(x = Column, y = Reference, fill = Color)) +
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1), aspect.ratio = 1)
 plot_width <- 10
 plot_height <- 10
-ggsave(g, file = "Different_Reference_for_ALR_10e-10_outlier.eps", device = "eps", width = plot_width, height = plot_height)
+ggsave(g, file = "Different_Reference_for_ALR_1_outlier.eps", device = "eps", width = plot_width, height = plot_height)
 
 
-## Situation 4: replace 0 with 1e-10, remove outliers
-identify_significant_columns <- function(data, group_factor = 1) {
-  results <- data.frame(Reference = integer(), SignificantColumns = character(), stringsAsFactors = FALSE)
-  num_cols <- ncol(data) - 1
-  
-  for (ref_component in 1:num_cols) {
-    transformed_data <- alr_transformation(data, group_factor, ref_component)
-    
-    group1_data <- transformed_data %>% filter(Group == unique(transformed_data$Group)[1])
-    group2_data <- transformed_data %>% filter(Group == unique(transformed_data$Group)[2])
-    
-    p_values <- sapply(2:ncol(transformed_data), function(col_index) {
-      if (col_index == ref_component + 1) {
-        return(NA)
-      } else {
-        t.test(group1_data[[col_index]], group2_data[[col_index]])$p.value
-      }
-    })
-    significant_cols <- which(p.adjust(p_values, method = "BH", n = length(p_values)) < 0.05)
-    
-    results <- rbind(results, data.frame(Reference = ref_component, SignificantColumns = paste(significant_cols, collapse = ", ")))
-  }
-  
-  return(results)
-}
-df <- replace_zeros(remove_outliers(df_0), 1e-10)
+## Situation 4: replace 0 with 1, remove outliers
+otu_table_data <- otu_table(physeq.tree)
+otu_table_transposed <- t(filter_rows(otu_table_data))
+data = as.data.frame(otu_table_transposed)
+filtered_df <- data %>%
+  filter(grepl("\\.MD", rownames(data)))
+df <- filtered_df %>%
+  mutate(Group = case_when(
+    grepl("^LTS", rownames(.)) ~ "A",
+    grepl("^STS", rownames(.)) ~ "B"
+  ))
+df_0 <- df %>%
+  select(Group, everything())
+df_cleaned <- remove_outliers(df_0)
+
+
+otu_table_compositional <- df_cleaned %>%
+  select(-Group) %>%
+  as.matrix()
+otu_table_compositional <- replace_zeros(otu_table_compositional,1) / rowSums(replace_zeros(otu_table_compositional,1),na.rm = TRUE)
+otu_table_compositional <- as.data.frame(otu_table_compositional)
+otu_table_compositional$Group <- df_cleaned$Group
+otu_table_compositional <- otu_table_compositional %>%
+  select(Group, everything())
+
+
+df <- otu_table_compositional
 significant_columns_results <- identify_significant_columns(df, group_factor = 1)
 
 
@@ -353,4 +372,4 @@ g <- ggplot(plot_df, aes(x = Column, y = Reference, fill = Color)) +
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1), aspect.ratio = 1)
 plot_width <- 10
 plot_height <- 10
-ggsave(g, file = "Different_Reference_for_ALR_10e-10_no_outlier.eps", device = "eps", width = plot_width, height = plot_height)
+ggsave(g, file = "Different_Reference_for_ALR_1_no_outlier.eps", device = "eps", width = plot_width, height = plot_height)
