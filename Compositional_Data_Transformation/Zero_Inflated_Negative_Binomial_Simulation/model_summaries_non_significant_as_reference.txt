@@ -1,0 +1,362 @@
+
+Transformation: ALR 
+
+Call:
+lm(formula = mean_power ~ alpha + beta0 + beta + q, data = subset_data)
+
+Residuals:
+     Min       1Q   Median       3Q      Max 
+-0.45115 -0.14695 -0.01412  0.15875  0.52119 
+
+Coefficients:
+            Estimate Std. Error t value Pr(>|t|)    
+(Intercept)  0.52193    0.02686  19.430  < 2e-16 ***
+alpha       -0.02233    0.00270  -8.272 8.04e-16 ***
+beta0       -0.02677    0.00270  -9.917  < 2e-16 ***
+beta         0.07339    0.00270  27.186  < 2e-16 ***
+q           -0.82728    0.02700 -30.643  < 2e-16 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 0.1909 on 620 degrees of freedom
+Multiple R-squared:  0.7485,	Adjusted R-squared:  0.7468 
+F-statistic: 461.2 on 4 and 620 DF,  p-value: < 2.2e-16
+
+
+Transformation: Additive (New)Power Ratio 
+
+Call:
+lm(formula = mean_power ~ alpha + beta0 + beta + q, data = subset_data)
+
+Residuals:
+     Min       1Q   Median       3Q      Max 
+-0.38104 -0.10576 -0.00623  0.10071  0.49249 
+
+Coefficients:
+             Estimate Std. Error t value Pr(>|t|)    
+(Intercept)  0.339116   0.021205  15.992  < 2e-16 ***
+alpha       -0.013026   0.002131  -6.112 1.74e-09 ***
+beta0       -0.013886   0.002131  -6.516 1.50e-10 ***
+beta         0.101598   0.002131  47.671  < 2e-16 ***
+q           -0.588144   0.021312 -27.596  < 2e-16 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 0.1507 on 620 degrees of freedom
+Multiple R-squared:  0.834,	Adjusted R-squared:  0.8329 
+F-statistic: 778.5 on 4 and 620 DF,  p-value: < 2.2e-16
+
+
+Transformation: Additive Arcsine Ratio 
+
+Call:
+lm(formula = mean_power ~ alpha + beta0 + beta + q, data = subset_data)
+
+Residuals:
+     Min       1Q   Median       3Q      Max 
+-0.42799 -0.10882 -0.03206  0.11963  0.40829 
+
+Coefficients:
+             Estimate Std. Error t value Pr(>|t|)    
+(Intercept)  0.592861   0.024017  24.685   <2e-16 ***
+alpha       -0.055908   0.002414 -23.162   <2e-16 ***
+beta0        0.001442   0.002414   0.598     0.55    
+beta         0.042447   0.002414  17.585   <2e-16 ***
+q           -0.677334   0.024138 -28.061   <2e-16 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 0.1707 on 620 degrees of freedom
+Multiple R-squared:  0.7249,	Adjusted R-squared:  0.7231 
+F-statistic: 408.4 on 4 and 620 DF,  p-value: < 2.2e-16
+
+
+Transformation: Additive Logit Ratio 
+
+Call:
+lm(formula = mean_power ~ alpha + beta0 + beta + q, data = subset_data)
+
+Residuals:
+     Min       1Q   Median       3Q      Max 
+-0.45154 -0.14409 -0.01374  0.15835  0.51754 
+
+Coefficients:
+             Estimate Std. Error t value Pr(>|t|)    
+(Intercept)  0.524022   0.026799  19.554  < 2e-16 ***
+alpha       -0.022555   0.002693  -8.374 3.71e-16 ***
+beta0       -0.026561   0.002693  -9.862  < 2e-16 ***
+beta         0.073348   0.002693  27.233  < 2e-16 ***
+q           -0.829205   0.026934 -30.787  < 2e-16 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 0.1905 on 620 degrees of freedom
+Multiple R-squared:  0.7497,	Adjusted R-squared:  0.7481 
+F-statistic: 464.2 on 4 and 620 DF,  p-value: < 2.2e-16
+
+
+Transformation: Additive New Logit Ratio 
+
+Call:
+lm(formula = mean_power ~ alpha + beta0 + beta + q, data = subset_data)
+
+Residuals:
+     Min       1Q   Median       3Q      Max 
+-0.44867 -0.11197 -0.01206  0.11246  0.43167 
+
+Coefficients:
+             Estimate Std. Error t value Pr(>|t|)    
+(Intercept)  0.560369   0.024103  23.249   <2e-16 ***
+alpha       -0.049445   0.002435 -20.303   <2e-16 ***
+beta0        0.002049   0.002435   0.841    0.401    
+beta         0.057192   0.002428  23.556   <2e-16 ***
+q           -0.762963   0.024353 -31.329   <2e-16 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 0.1711 on 616 degrees of freedom
+  (4 observations deleted due to missingness)
+Multiple R-squared:  0.7586,	Adjusted R-squared:  0.7571 
+F-statistic:   484 on 4 and 616 DF,  p-value: < 2.2e-16
+
+
+Transformation: Additive Power Ratio 
+
+Call:
+lm(formula = mean_power ~ alpha + beta0 + beta + q, data = subset_data)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-0.5301 -0.1431  0.0020  0.1574  0.4350 
+
+Coefficients:
+             Estimate Std. Error t value Pr(>|t|)    
+(Intercept)  0.571129   0.028429  20.090  < 2e-16 ***
+alpha       -0.029966   0.002857 -10.488  < 2e-16 ***
+beta0       -0.021093   0.002857  -7.382 5.03e-13 ***
+beta         0.080072   0.002857  28.024  < 2e-16 ***
+q           -0.781840   0.028572 -27.364  < 2e-16 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 0.202 on 620 degrees of freedom
+Multiple R-squared:  0.7326,	Adjusted R-squared:  0.7309 
+F-statistic: 424.7 on 4 and 620 DF,  p-value: < 2.2e-16
+
+
+Transformation: Boxcox in Ratio - William 
+
+Call:
+lm(formula = mean_power ~ alpha + beta0 + beta + q, data = subset_data)
+
+Residuals:
+     Min       1Q   Median       3Q      Max 
+-0.43392 -0.14735 -0.01659  0.15143  0.48993 
+
+Coefficients:
+             Estimate Std. Error t value Pr(>|t|)    
+(Intercept)  0.504716   0.026877  18.779  < 2e-16 ***
+alpha       -0.022931   0.002701  -8.489  < 2e-16 ***
+beta0       -0.019284   0.002701  -7.139 2.64e-12 ***
+beta         0.067279   0.002701  24.907  < 2e-16 ***
+q           -0.846224   0.027012 -31.327  < 2e-16 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 0.191 on 620 degrees of freedom
+Multiple R-squared:  0.7356,	Adjusted R-squared:  0.7339 
+F-statistic: 431.2 on 4 and 620 DF,  p-value: < 2.2e-16
+
+
+Transformation: CLR 
+
+Call:
+lm(formula = mean_power ~ alpha + beta0 + beta + q, data = subset_data)
+
+Residuals:
+     Min       1Q   Median       3Q      Max 
+-0.30314 -0.13171 -0.04834  0.09215  0.63139 
+
+Coefficients:
+             Estimate Std. Error t value Pr(>|t|)    
+(Intercept)  0.362542   0.025946  13.973  < 2e-16 ***
+alpha       -0.024301   0.002608  -9.319  < 2e-16 ***
+beta0       -0.010022   0.002608  -3.843 0.000134 ***
+beta         0.036723   0.002608  14.083  < 2e-16 ***
+q           -0.565072   0.026077 -21.669  < 2e-16 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 0.1844 on 620 degrees of freedom
+Multiple R-squared:  0.5538,	Adjusted R-squared:  0.5509 
+F-statistic: 192.4 on 4 and 620 DF,  p-value: < 2.2e-16
+
+
+Transformation: Centered (New)Power Ratio 
+
+Call:
+lm(formula = mean_power ~ alpha + beta0 + beta + q, data = subset_data)
+
+Residuals:
+     Min       1Q   Median       3Q      Max 
+-0.45217 -0.10544 -0.00264  0.10609  0.55103 
+
+Coefficients:
+             Estimate Std. Error t value Pr(>|t|)    
+(Intercept)  0.235163   0.021161  11.113  < 2e-16 ***
+alpha       -0.008919   0.002127  -4.194 3.15e-05 ***
+beta0       -0.011843   0.002127  -5.568 3.84e-08 ***
+beta         0.096704   0.002127  45.469  < 2e-16 ***
+q           -0.492554   0.021268 -23.159  < 2e-16 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 0.1504 on 620 degrees of freedom
+Multiple R-squared:  0.8105,	Adjusted R-squared:  0.8093 
+F-statistic: 663.1 on 4 and 620 DF,  p-value: < 2.2e-16
+
+
+Transformation: Centered Arcsine Ratio 
+
+Call:
+lm(formula = mean_power ~ alpha + beta0 + beta + q, data = subset_data)
+
+Residuals:
+     Min       1Q   Median       3Q      Max 
+-0.18519 -0.08606 -0.03381  0.03982  0.65417 
+
+Coefficients:
+              Estimate Std. Error t value Pr(>|t|)    
+(Intercept)  0.2654254  0.0202950  13.078  < 2e-16 ***
+alpha       -0.0293123  0.0020397 -14.371  < 2e-16 ***
+beta0        0.0006286  0.0020397   0.308    0.758    
+beta         0.0133030  0.0020397   6.522 1.44e-10 ***
+q           -0.2758640  0.0203973 -13.525  < 2e-16 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 0.1442 on 620 degrees of freedom
+Multiple R-squared:  0.4107,	Adjusted R-squared:  0.4069 
+F-statistic:   108 on 4 and 620 DF,  p-value: < 2.2e-16
+
+
+Transformation: Centered Logit Ratio 
+
+Call:
+lm(formula = mean_power ~ alpha + beta0 + beta + q, data = subset_data)
+
+Residuals:
+     Min       1Q   Median       3Q      Max 
+-0.30275 -0.13150 -0.04856  0.09188  0.63054 
+
+Coefficients:
+             Estimate Std. Error t value Pr(>|t|)    
+(Intercept)  0.363138   0.025910  14.015  < 2e-16 ***
+alpha       -0.024488   0.002604  -9.404  < 2e-16 ***
+beta0       -0.009936   0.002604  -3.815  0.00015 ***
+beta         0.036610   0.002604  14.059  < 2e-16 ***
+q           -0.564302   0.026041 -21.670  < 2e-16 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 0.1841 on 620 degrees of freedom
+Multiple R-squared:  0.554,	Adjusted R-squared:  0.5511 
+F-statistic: 192.6 on 4 and 620 DF,  p-value: < 2.2e-16
+
+
+Transformation: Centered New Logit Ratio 
+
+Call:
+lm(formula = mean_power ~ alpha + beta0 + beta + q, data = subset_data)
+
+Residuals:
+     Min       1Q   Median       3Q      Max 
+-0.26063 -0.09862 -0.03915  0.05247  0.62012 
+
+Coefficients:
+             Estimate Std. Error t value Pr(>|t|)    
+(Intercept)  0.333245   0.022160  15.038   <2e-16 ***
+alpha       -0.036041   0.002245 -16.052   <2e-16 ***
+beta0        0.002392   0.002257   1.060     0.29    
+beta         0.022238   0.002239   9.932   <2e-16 ***
+q           -0.402531   0.022569 -17.836   <2e-16 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 0.1571 on 611 degrees of freedom
+  (9 observations deleted due to missingness)
+Multiple R-squared:  0.5193,	Adjusted R-squared:  0.5162 
+F-statistic:   165 on 4 and 611 DF,  p-value: < 2.2e-16
+
+
+Transformation: Centered Power Ratio 
+
+Call:
+lm(formula = mean_power ~ alpha + beta0 + beta + q, data = subset_data)
+
+Residuals:
+     Min       1Q   Median       3Q      Max 
+-0.58059 -0.17937  0.00513  0.18773  0.54821 
+
+Coefficients:
+             Estimate Std. Error t value Pr(>|t|)    
+(Intercept)  0.521135   0.033046  15.770  < 2e-16 ***
+alpha       -0.038057   0.003321 -11.459  < 2e-16 ***
+beta0       -0.013747   0.003321  -4.139 3.97e-05 ***
+beta         0.071574   0.003321  21.550  < 2e-16 ***
+q           -0.681542   0.033213 -20.521  < 2e-16 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 0.2348 on 620 degrees of freedom
+Multiple R-squared:  0.6251,	Adjusted R-squared:  0.6227 
+F-statistic: 258.5 on 4 and 620 DF,  p-value: < 2.2e-16
+
+
+Transformation: ILR 
+
+Call:
+lm(formula = mean_power ~ alpha + beta0 + beta + q, data = subset_data)
+
+Residuals:
+       Min         1Q     Median         3Q        Max 
+-0.0210378 -0.0057091 -0.0002157  0.0061882  0.0206026 
+
+Coefficients:
+              Estimate Std. Error t value Pr(>|t|)    
+(Intercept)  0.0223616  0.0011362  19.682  < 2e-16 ***
+alpha       -0.0005848  0.0001142  -5.121 4.06e-07 ***
+beta0       -0.0017475  0.0001142 -15.304  < 2e-16 ***
+beta         0.0044494  0.0001142  38.965  < 2e-16 ***
+q           -0.0242272  0.0011419 -21.217  < 2e-16 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 0.008074 on 620 degrees of freedom
+Multiple R-squared:  0.7824,	Adjusted R-squared:  0.781 
+F-statistic: 557.2 on 4 and 620 DF,  p-value: < 2.2e-16
+
+
+Transformation: New Boxcox in Ratio 
+
+Call:
+lm(formula = mean_power ~ alpha + beta0 + beta + q, data = subset_data)
+
+Residuals:
+     Min       1Q   Median       3Q      Max 
+-0.44926 -0.14425 -0.01471  0.15325  0.50592 
+
+Coefficients:
+             Estimate Std. Error t value Pr(>|t|)    
+(Intercept)  0.526815   0.027029  19.491   <2e-16 ***
+alpha       -0.023490   0.002716  -8.647   <2e-16 ***
+beta0       -0.023571   0.002716  -8.677   <2e-16 ***
+beta         0.071689   0.002716  26.390   <2e-16 ***
+q           -0.849080   0.027165 -31.257   <2e-16 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 0.1921 on 620 degrees of freedom
+Multiple R-squared:  0.7463,	Adjusted R-squared:  0.7446 
+F-statistic: 455.9 on 4 and 620 DF,  p-value: < 2.2e-16
+

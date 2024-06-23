@@ -56,9 +56,6 @@ filtered_otu_data <- otu_data[, grepl("\\.MD", colnames(otu_data))]
 filtered_otu_data <- filter_rows(filtered_otu_data)
 sample_data <- as.data.frame(sample_data(physeq.tree))
 filtered_sample_data <- sample_data[grepl("\\.MD", rownames(sample_data)), ]
-if (!"group" %in% colnames(filtered_sample_data)) {
-  stop("The 'group' variable is not found in the sample data. Please ensure it exists and is correctly named.")
-}
 dds <- DESeqDataSetFromMatrix(
   countData = as.matrix(filtered_otu_data),
   colData = filtered_sample_data,
@@ -168,7 +165,7 @@ triangles_df_y <- data.frame(Column = rep(1, length(values_to_annotate)), Refere
 g <- ggplot(plot_df, aes(x = Column, y = Reference, fill = Color)) +
   geom_tile() +
   scale_fill_manual(values = c("white" = "white", "blue" = "blue", "red" = "red"),
-                    labels = c("", "Reference", "Significant")) +
+                    labels = c("Non-Significant", "Reference", "Significant")) +
   geom_point(data = triangles_df_x, aes(x = Column, y = Reference), shape = 17, color = "green", size = 1, inherit.aes = FALSE) +
   geom_point(data = triangles_df_y, aes(x = Column, y = Reference), shape = 17, color = "green", size = 1, inherit.aes = FALSE) +
   theme_minimal() +
@@ -231,7 +228,7 @@ triangles_df_y <- data.frame(Column = rep(1, length(values_to_annotate)), Refere
 g <- ggplot(plot_df, aes(x = Column, y = Reference, fill = Color)) +
   geom_tile() +
   scale_fill_manual(values = c("white" = "white", "blue" = "blue", "red" = "red"),
-                    labels = c("", "Reference", "Significant")) +
+                    labels = c("Non-Significant", "Reference", "Significant")) +
   geom_point(data = triangles_df_x, aes(x = Column, y = Reference), shape = 17, color = "green", size = 1, inherit.aes = FALSE) +
   geom_point(data = triangles_df_y, aes(x = Column, y = Reference), shape = 17, color = "green", size = 1, inherit.aes = FALSE) +
   theme_minimal() +
@@ -296,7 +293,7 @@ triangles_df_y <- data.frame(Column = rep(1, length(values_to_annotate)), Refere
 g <- ggplot(plot_df, aes(x = Column, y = Reference, fill = Color)) +
   geom_tile() +
   scale_fill_manual(values = c("white" = "white", "blue" = "blue", "red" = "red"),
-                    labels = c("", "Reference", "Significant")) +
+                    labels = c("Non-Significant", "Reference", "Significant")) +
   geom_point(data = triangles_df_x, aes(x = Column, y = Reference), shape = 17, color = "green", size = 1, inherit.aes = FALSE) +
   geom_point(data = triangles_df_y, aes(x = Column, y = Reference), shape = 17, color = "green", size = 1, inherit.aes = FALSE) +
   theme_minimal() +
@@ -361,7 +358,7 @@ triangles_df_y <- data.frame(Column = rep(1, length(values_to_annotate)), Refere
 g <- ggplot(plot_df, aes(x = Column, y = Reference, fill = Color)) +
   geom_tile() +
   scale_fill_manual(values = c("white" = "white", "blue" = "blue", "red" = "red"),
-                    labels = c("", "Reference", "Significant")) +
+                    labels = c("Non-Significant", "Reference", "Significant")) +
   geom_point(data = triangles_df_x, aes(x = Column, y = Reference), shape = 17, color = "green", size = 1, inherit.aes = FALSE) +
   geom_point(data = triangles_df_y, aes(x = Column, y = Reference), shape = 17, color = "green", size = 1, inherit.aes = FALSE) +
   theme_minimal() +
