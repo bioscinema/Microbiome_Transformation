@@ -325,4 +325,191 @@ num_simulations <- 100
 combined_results <- simulate_and_combine_results(n, p, eta_values, q_values, eta_not_significant, nu_a, nu_b, x_a, x_b, beta, num_simulations)
 
 # Save to CSV
-write.csv(combined_results, "combined_results.csv", row.names = FALSE)
+write.csv(combined_results, "Power_summary.csv", row.names = FALSE)
+
+
+
+
+adjust_values <- function(values) {
+  epsilon <- 1e-5
+  pmax(epsilon, pmin(values, 1 - epsilon))
+}
+calculate_skewness_kurtosis <- function(data) {
+  results <- list()
+  
+  original_stats <- sapply(data[-1], function(col) {
+    list(
+      skewness = list(
+        A = skewness(col[data$group == "A"], na.rm = TRUE),
+        B = skewness(col[data$group == "B"], na.rm = TRUE)
+      ),
+      kurtosis = list(
+        A = kurtosis(col[data$group == "A"], na.rm = TRUE),
+        B = kurtosis(col[data$group == "B"], na.rm = TRUE)
+      )
+    )
+  })
+  
+  results$original <- original_stats
+  
+  transformations_no_group <- list(
+    logit = logit_transformation,
+    log = log_transformation,
+    tangent = tangent_transformation,
+    arcsine = arcsine_transformation
+  )
+  
+  for (transformation_name in names(transformations_no_group)) {
+    transformed_data <- data.frame(group = data$group)
+    
+    for (colname in colnames(data)[-1]) {
+      transformed_data[[colname]] <- transformations_no_group[[transformation_name]](adjust_values(data[[colname]]))
+    }
+    
+    transformed_stats <- sapply(transformed_data[-1], function(col) {
+      list(
+        skewness = list(
+          A = skewness(col[transformed_data$group == "A"], na.rm = TRUE),
+          B = skewness(col[transformed_data$group == "B"], na.rm = TRUE)
+        ),
+        kurtosis = list(
+          A = kurtosis(col[transformed_data$group == "A"], na.rm = TRUE),
+          B = kurtosis(col[transformed_data$group == "B"], na.rm = TRUE)
+        )
+      )
+    })
+    
+    results[[transformation_name]] <- transformed_stats
+  }
+  
+  transformations_with_group <- list(
+    dual_group_logit = Dual_Group_logit_transformation,
+    dual_group_boxcox = Dual_Group_boxcox_transformation,
+    boxcox = boxcox_transformation
+  )
+  
+  for (transformation_name in names(transformations_with_group)) {
+    transformed_data <- data.frame(group = data$group)
+    
+    for (colname in colnames(data)[-1]) {
+      transformed_column_data <- data.frame(group = data$group, value = adjust_values(data[[colname]]))
+      transformed_column_data <- transformations_with_group[[transformation_name]](transformed_column_data)
+      transformed_data[[colname]] <- transformed_column_data$value
+    }
+    
+    transformed_stats <- sapply(transformed_data[-1], function(col) {
+      list(
+        skewness = list(
+          A = skewness(col[transformed_data$group == "A"], na.rm = TRUE),
+          B = skewness(col[transformed_data$group == "B"], na.rm = TRUE)
+        ),
+        kurtosis = list(
+          A = kurtosis(col[transformed_data$group == "A"], na.rm = TRUE),
+          B = kurtosis(col[transformed_data$group == "B"], na.rm = TRUE)
+        )
+      )
+    })
+    
+    results[[transformation_name]] <- transformed_stats
+  }
+  
+  return(results)
+}
+
+# Function to summarize statistics
+summarize_statistics <- function(values) {
+  c(
+    mean = mean(values, na.rm = TRUE),
+    sd = sd(values, na.rm = TRUE)
+  )
+}
+
+# Main simulation function
+perform_simulations <- function(eta, q, n_simulations) {
+  all_stats <- vector("list", n_simulations)
+  
+  for (i in 1:n_simulations) {
+    data <- generate_zero_inflated_beta_data(n, p, eta, 0, nu_a, nu_b, x_a, x_b, beta, q)
+    all_stats[[i]] <- calculate_skewness_kurtosis(data)
+  }
+  
+  transformation_names <- names(all_stats[[1]])
+  data_names <- c("skewness", "kurtosis")
+  group_names <- c("A", "B")
+  values <- list()
+  
+  for (i in seq_len(n_simulations)) {
+    for (transformation_name in transformation_names) {
+      for (data_name in data_names) {
+        for (group_name in group_names) {
+          temp <- c()
+          for (j in seq_len(ncol(all_stats[[i]][[transformation_name]]))) {
+            subdata <- all_stats[[i]][[transformation_name]][, j]
+            temp <- c(temp, subdata[[data_name]][[group_name]])
+          }
+          if (is.null(values[[transformation_name]])) values[[transformation_name]] <- list()
+          if (is.null(values[[transformation_name]][[data_name]])) values[[transformation_name]][[data_name]] <- list()
+          if (is.null(values[[transformation_name]][[data_name]][[group_name]])) values[[transformation_name]][[data_name]][[group_name]] <- c()
+          values[[transformation_name]][[data_name]][[group_name]] <- c(values[[transformation_name]][[data_name]][[group_name]], mean(temp))
+        }
+      }
+    }
+  }
+  
+  summarize_table <- list()
+  for (transformation_name in transformation_names) {
+    summarize_table[[transformation_name]] <- list()
+    for (data_name in data_names) {
+      summarize_table[[transformation_name]][[data_name]] <- list()
+      for (group_name in group_names) {
+        summarize_table[[transformation_name]][[data_name]][[group_name]] <- summarize_statistics(values[[transformation_name]][[data_name]][[group_name]])
+      }
+    }
+  }
+  
+  return(summarize_table)
+}
+
+# Perform simulations for each eta and q combination
+results <- list()
+
+eta_values <- c(-0.5, -0.7)
+q_values <- c(0, 0.3, 0.5, 0.7)
+n_simulations <- 100
+
+for (eta in eta_values) {
+  for (q in q_values) {
+    simulation_result <- perform_simulations(eta, q, n_simulations)
+    results[[paste0("eta_", eta, "_q_", q)]] <- simulation_result
+  }
+}
+
+# Convert results to data frame for CSV output
+df_list <- list()
+
+for (result_name in names(results)) {
+  result <- results[[result_name]]
+  
+  # Extract eta and q values correctly
+  eta_value <- as.numeric(gsub("eta_([^_]+)_q_.*", "\\1", result_name))
+  q_value <- as.numeric(gsub(".*_q_([^_]+)", "\\1", result_name))
+  
+  for (transformation_name in names(result)) {
+    for (data_name in names(result[[transformation_name]])) {
+      for (group_name in names(result[[transformation_name]][[data_name]])) {
+        temp <- result[[transformation_name]][[data_name]][[group_name]]
+        df_list[[length(df_list) + 1]] <- data.frame(
+          eta = eta_value,
+          q = q_value,
+          transformation = transformation_name,
+          metric = data_name,
+          group = group_name,
+          mean = temp["mean"],
+          sd = temp["sd"]
+        )
+      }
+    }
+  }
+}
+final_df <- bind_rows(df_list)
+write.csv(final_df, "Skewness_kurtosis.csv", row.names = FALSE)
