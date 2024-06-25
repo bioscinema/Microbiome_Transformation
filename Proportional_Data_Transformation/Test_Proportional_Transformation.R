@@ -2,6 +2,8 @@
 library(MASS)
 library(reticulate)
 library(betareg)
+library(moments)
+library(dplyr)
 source_python("Scource_Code.py")
 
 log_transformation = function(x){
@@ -22,11 +24,9 @@ replace_zeros <- function(values, replacement_value = 1e-10) {
   return(values)
 }
 boxcox_transformation <- function(dataframe) {
-  x <- replace_zeros(dataframe$value)
-  boxcox_result <- boxcox(lm(x ~ 1), plotit = FALSE)
+  x = replace_zeros(dataframe[["value"]])
+  boxcox_result <- boxcox(lm(x ~ 1, y = TRUE), plotit = FALSE)
   lambda_optimal <- boxcox_result$x[which.max(boxcox_result$y)]
-  
-  # Apply the optimal lambda
   if (lambda_optimal == 0) {
     transformed_data <- log(x)
   } else {
