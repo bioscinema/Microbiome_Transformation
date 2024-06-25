@@ -29,7 +29,7 @@ def dual_group_boxcox_transformation2(p1, p2):
         return total_nll
     
     bounds = [(-10, 10)]
-    initial_guess = [1]  # A reasonable initial guess for lambda
+    initial_guess = [0.1]  # A reasonable initial guess for lambda
     result = minimize(combined_negative_log_likelihood, initial_guess, method='L-BFGS-B', bounds=bounds)
     optimized_lambda = result.x[0]
     optimized_lambda = round(optimized_lambda, 4)
@@ -66,7 +66,7 @@ def new_logit_transformation_s(p1, p2):
             total_nll += -nll 
         return total_nll
     bounds = [(0, None), (0, None)]
-    initial_guess = [0.001, 0]
+    initial_guess = [0.0001, 0]
     result = minimize(combined_negative_log_likelihood, initial_guess, method='L-BFGS-B', bounds=bounds)
     optimized_phi, optimized_varphi = result.x
     
