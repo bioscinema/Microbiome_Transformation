@@ -1,0 +1,465 @@
+
+Transformation: ALR 
+
+Call:
+lm(formula = mean_fdr ~ diff_otu_direct + diff_otu_mode + depth_mu + 
+    depth_theta + covariate_eff_sd + confounder_eff_sd + depth_conf_factor, 
+    data = subset_data)
+
+Residuals:
+     Min       1Q   Median       3Q      Max 
+-0.54518 -0.08140  0.00244  0.08196  0.50787 
+
+Coefficients:
+                            Estimate Std. Error t value Pr(>|t|)    
+(Intercept)                5.016e-02  2.179e-02   2.302 0.021731 *  
+diff_otu_directunbalanced  3.257e-02  1.187e-02   2.745 0.006249 ** 
+diff_otu_modemix           9.077e-02  1.440e-02   6.301 6.00e-10 ***
+diff_otu_moderare          6.883e-01  1.461e-02  47.109  < 2e-16 ***
+depth_mu                  -1.160e-05  1.410e-06  -8.224 1.40e-15 ***
+depth_theta               -5.160e-04  1.456e-03  -0.354 0.723147    
+covariate_eff_sd          -9.283e-02  2.373e-02  -3.912 0.000103 ***
+confounder_eff_sd          1.394e-01  2.374e-02   5.873 7.36e-09 ***
+depth_conf_factor          1.987e-01  2.375e-02   8.367 4.79e-16 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 0.1411 on 557 degrees of freedom
+  (10 observations deleted due to missingness)
+Multiple R-squared:  0.8351,	Adjusted R-squared:  0.8327 
+F-statistic: 352.6 on 8 and 557 DF,  p-value: < 2.2e-16
+
+
+Transformation: Additive (New)Power Ratio 
+
+Call:
+lm(formula = mean_fdr ~ diff_otu_direct + diff_otu_mode + depth_mu + 
+    depth_theta + covariate_eff_sd + confounder_eff_sd + depth_conf_factor, 
+    data = subset_data)
+
+Residuals:
+     Min       1Q   Median       3Q      Max 
+-0.86898 -0.02961  0.02400  0.10666  0.21318 
+
+Coefficients:
+                           Estimate Std. Error t value Pr(>|t|)    
+(Intercept)               7.555e-01  2.732e-02  27.658  < 2e-16 ***
+diff_otu_directunbalanced 4.096e-02  1.513e-02   2.706  0.00703 ** 
+diff_otu_modemix          1.968e-02  1.870e-02   1.053  0.29305    
+diff_otu_moderare         1.804e-02  1.865e-02   0.967  0.33399    
+depth_mu                  3.712e-06  1.826e-06   2.033  0.04258 *  
+depth_theta               5.306e-03  1.844e-03   2.877  0.00418 ** 
+covariate_eff_sd          2.155e-03  3.025e-02   0.071  0.94325    
+confounder_eff_sd         2.554e-02  3.024e-02   0.844  0.39884    
+depth_conf_factor         8.240e-02  3.048e-02   2.704  0.00709 ** 
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 0.1723 on 511 degrees of freedom
+  (56 observations deleted due to missingness)
+Multiple R-squared:  0.05591,	Adjusted R-squared:  0.04113 
+F-statistic: 3.783 on 8 and 511 DF,  p-value: 0.0002517
+
+
+Transformation: Additive Arcsine Ratio 
+
+Call:
+lm(formula = mean_fdr ~ diff_otu_direct + diff_otu_mode + depth_mu + 
+    depth_theta + covariate_eff_sd + confounder_eff_sd + depth_conf_factor, 
+    data = subset_data)
+
+Residuals:
+     Min       1Q   Median       3Q      Max 
+-0.57746 -0.05360  0.00659  0.06612  0.37310 
+
+Coefficients:
+                            Estimate Std. Error t value Pr(>|t|)    
+(Intercept)                2.259e-02  2.138e-02   1.056 0.291252    
+diff_otu_directunbalanced  1.058e-01  1.165e-02   9.075  < 2e-16 ***
+diff_otu_modemix           2.688e-02  1.417e-02   1.896 0.058444 .  
+diff_otu_moderare          6.729e-01  1.433e-02  46.958  < 2e-16 ***
+depth_mu                  -5.318e-06  1.386e-06  -3.837 0.000139 ***
+depth_theta               -1.328e-03  1.430e-03  -0.929 0.353528    
+covariate_eff_sd          -1.052e-01  2.331e-02  -4.513 7.81e-06 ***
+confounder_eff_sd          2.077e-01  2.331e-02   8.911  < 2e-16 ***
+depth_conf_factor          7.995e-03  2.331e-02   0.343 0.731781    
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 0.1389 on 559 degrees of freedom
+  (8 observations deleted due to missingness)
+Multiple R-squared:  0.8437,	Adjusted R-squared:  0.8415 
+F-statistic: 377.2 on 8 and 559 DF,  p-value: < 2.2e-16
+
+
+Transformation: Additive Logit Ratio 
+
+Call:
+lm(formula = mean_fdr ~ diff_otu_direct + diff_otu_mode + depth_mu + 
+    depth_theta + covariate_eff_sd + confounder_eff_sd + depth_conf_factor, 
+    data = subset_data)
+
+Residuals:
+     Min       1Q   Median       3Q      Max 
+-0.54441 -0.07946  0.00563  0.07986  0.51171 
+
+Coefficients:
+                            Estimate Std. Error t value Pr(>|t|)    
+(Intercept)                5.048e-02  2.160e-02   2.337 0.019778 *  
+diff_otu_directunbalanced  3.289e-02  1.176e-02   2.797 0.005334 ** 
+diff_otu_modemix           8.911e-02  1.428e-02   6.242 8.57e-10 ***
+diff_otu_moderare          6.882e-01  1.448e-02  47.533  < 2e-16 ***
+depth_mu                  -1.147e-05  1.397e-06  -8.211 1.54e-15 ***
+depth_theta               -6.324e-04  1.443e-03  -0.438 0.661309    
+covariate_eff_sd          -8.969e-02  2.352e-02  -3.814 0.000152 ***
+confounder_eff_sd          1.428e-01  2.353e-02   6.071 2.36e-09 ***
+depth_conf_factor          1.960e-01  2.353e-02   8.329 6.38e-16 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 0.1399 on 557 degrees of freedom
+  (10 observations deleted due to missingness)
+Multiple R-squared:  0.8377,	Adjusted R-squared:  0.8354 
+F-statistic: 359.3 on 8 and 557 DF,  p-value: < 2.2e-16
+
+
+Transformation: Additive New Logit Ratio 
+
+Call:
+lm(formula = mean_fdr ~ diff_otu_direct + diff_otu_mode + depth_mu + 
+    depth_theta + covariate_eff_sd + confounder_eff_sd + depth_conf_factor, 
+    data = subset_data)
+
+Residuals:
+     Min       1Q   Median       3Q      Max 
+-0.39446 -0.08570 -0.01327  0.07931  0.39469 
+
+Coefficients:
+                            Estimate Std. Error t value Pr(>|t|)    
+(Intercept)                2.168e-01  2.231e-02   9.718  < 2e-16 ***
+diff_otu_directunbalanced  2.648e-01  1.211e-02  21.874  < 2e-16 ***
+diff_otu_modemix           1.291e-01  1.482e-02   8.710  < 2e-16 ***
+diff_otu_moderare          5.797e-01  1.482e-02  39.117  < 2e-16 ***
+depth_mu                   1.420e-06  1.355e-06   1.048  0.29506    
+depth_theta                1.018e-03  1.484e-03   0.686  0.49305    
+covariate_eff_sd          -1.352e-01  2.421e-02  -5.585 4.18e-08 ***
+confounder_eff_sd          7.382e-02  2.421e-02   3.049  0.00244 ** 
+depth_conf_factor         -4.416e-02  2.421e-02  -1.824  0.06890 .  
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 0.126 on 424 degrees of freedom
+  (143 observations deleted due to missingness)
+Multiple R-squared:  0.8391,	Adjusted R-squared:  0.8361 
+F-statistic: 276.4 on 8 and 424 DF,  p-value: < 2.2e-16
+
+
+Transformation: Additive Power Ratio 
+
+Call:
+lm(formula = mean_fdr ~ diff_otu_direct + diff_otu_mode + depth_mu + 
+    depth_theta + covariate_eff_sd + confounder_eff_sd + depth_conf_factor, 
+    data = subset_data)
+
+Residuals:
+     Min       1Q   Median       3Q      Max 
+-0.65439 -0.14466  0.00179  0.12697  0.59544 
+
+Coefficients:
+                            Estimate Std. Error t value Pr(>|t|)    
+(Intercept)                4.022e-01  3.727e-02  10.791  < 2e-16 ***
+diff_otu_directunbalanced  9.132e-02  2.044e-02   4.467 9.70e-06 ***
+diff_otu_modemix          -5.768e-02  2.526e-02  -2.283  0.02280 *  
+diff_otu_moderare          7.935e-02  2.520e-02   3.149  0.00173 ** 
+depth_mu                   1.542e-05  2.504e-06   6.159 1.45e-09 ***
+depth_theta                3.722e-03  2.503e-03   1.487  0.13765    
+covariate_eff_sd          -6.342e-02  4.088e-02  -1.551  0.12145    
+confounder_eff_sd          5.329e-02  4.090e-02   1.303  0.19319    
+depth_conf_factor          7.330e-01  4.104e-02  17.860  < 2e-16 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 0.2377 on 532 degrees of freedom
+  (35 observations deleted due to missingness)
+Multiple R-squared:  0.4447,	Adjusted R-squared:  0.4364 
+F-statistic: 53.26 on 8 and 532 DF,  p-value: < 2.2e-16
+
+
+Transformation: Boxcox in Ratio - William 
+
+Call:
+lm(formula = mean_fdr ~ diff_otu_direct + diff_otu_mode + depth_mu + 
+    depth_theta + covariate_eff_sd + confounder_eff_sd + depth_conf_factor, 
+    data = subset_data)
+
+Residuals:
+     Min       1Q   Median       3Q      Max 
+-0.54402 -0.07985  0.00823  0.07723  0.42885 
+
+Coefficients:
+                            Estimate Std. Error t value Pr(>|t|)    
+(Intercept)                3.061e-02  2.096e-02   1.460  0.14472    
+diff_otu_directunbalanced  4.988e-02  1.143e-02   4.363 1.53e-05 ***
+diff_otu_modemix           9.410e-02  1.390e-02   6.768 3.31e-11 ***
+diff_otu_moderare          7.137e-01  1.406e-02  50.760  < 2e-16 ***
+depth_mu                  -9.246e-06  1.360e-06  -6.799 2.71e-11 ***
+depth_theta               -9.641e-04  1.401e-03  -0.688  0.49176    
+covariate_eff_sd          -8.072e-02  2.286e-02  -3.530  0.00045 ***
+confounder_eff_sd          1.382e-01  2.287e-02   6.043 2.77e-09 ***
+depth_conf_factor          1.657e-01  2.287e-02   7.243 1.46e-12 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 0.1362 on 559 degrees of freedom
+  (8 observations deleted due to missingness)
+Multiple R-squared:  0.8519,	Adjusted R-squared:  0.8498 
+F-statistic:   402 on 8 and 559 DF,  p-value: < 2.2e-16
+
+
+Transformation: CLR 
+
+Call:
+lm(formula = mean_fdr ~ diff_otu_direct + diff_otu_mode + depth_mu + 
+    depth_theta + covariate_eff_sd + confounder_eff_sd + depth_conf_factor, 
+    data = subset_data)
+
+Residuals:
+     Min       1Q   Median       3Q      Max 
+-0.45054 -0.13458 -0.05975  0.14074  0.55255 
+
+Coefficients:
+                            Estimate Std. Error t value Pr(>|t|)    
+(Intercept)                1.113e-01  3.384e-02   3.290  0.00107 ** 
+diff_otu_directunbalanced  3.828e-02  1.848e-02   2.071  0.03878 *  
+diff_otu_modemix           4.849e-02  2.254e-02   2.152  0.03185 *  
+diff_otu_moderare          3.749e-01  2.269e-02  16.522  < 2e-16 ***
+depth_mu                  -2.635e-05  2.201e-06 -11.972  < 2e-16 ***
+depth_theta               -1.797e-04  2.265e-03  -0.079  0.93680    
+covariate_eff_sd          -7.342e-02  3.696e-02  -1.986  0.04748 *  
+confounder_eff_sd          1.606e-01  3.697e-02   4.343 1.66e-05 ***
+depth_conf_factor          6.773e-01  3.697e-02  18.322  < 2e-16 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 0.2208 on 562 degrees of freedom
+  (5 observations deleted due to missingness)
+Multiple R-squared:  0.5981,	Adjusted R-squared:  0.5924 
+F-statistic: 104.6 on 8 and 562 DF,  p-value: < 2.2e-16
+
+
+Transformation: Centered (New)Power Ratio 
+
+Call:
+lm(formula = mean_fdr ~ diff_otu_direct + diff_otu_mode + depth_mu + 
+    depth_theta + covariate_eff_sd + confounder_eff_sd + depth_conf_factor, 
+    data = subset_data)
+
+Residuals:
+     Min       1Q   Median       3Q      Max 
+-0.84070 -0.02966  0.00583  0.09066  0.23126 
+
+Coefficients:
+                            Estimate Std. Error t value Pr(>|t|)    
+(Intercept)                7.664e-01  2.715e-02  28.227  < 2e-16 ***
+diff_otu_directunbalanced -9.169e-03  1.517e-02  -0.604  0.54587    
+diff_otu_modemix           2.485e-02  1.856e-02   1.338  0.18138    
+diff_otu_moderare         -1.123e-02  1.853e-02  -0.606  0.54487    
+depth_mu                   2.693e-06  1.839e-06   1.465  0.14366    
+depth_theta                4.597e-03  1.851e-03   2.483  0.01334 *  
+covariate_eff_sd          -4.710e-04  3.032e-02  -0.016  0.98761    
+confounder_eff_sd          2.857e-02  3.033e-02   0.942  0.34657    
+depth_conf_factor          1.194e-01  3.063e-02   3.897  0.00011 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 0.1713 on 502 degrees of freedom
+  (65 observations deleted due to missingness)
+Multiple R-squared:  0.05598,	Adjusted R-squared:  0.04093 
+F-statistic: 3.721 on 8 and 502 DF,  p-value: 0.0003058
+
+
+Transformation: Centered Arcsine Ratio 
+
+Call:
+lm(formula = mean_fdr ~ diff_otu_direct + diff_otu_mode + depth_mu + 
+    depth_theta + covariate_eff_sd + confounder_eff_sd + depth_conf_factor, 
+    data = subset_data)
+
+Residuals:
+     Min       1Q   Median       3Q      Max 
+-0.57095 -0.17614 -0.06011  0.13618  0.67497 
+
+Coefficients:
+                            Estimate Std. Error t value Pr(>|t|)    
+(Intercept)                1.160e-01  3.917e-02   2.963  0.00317 ** 
+diff_otu_directunbalanced  2.018e-02  2.140e-02   0.943  0.34603    
+diff_otu_modemix           1.509e-02  2.616e-02   0.577  0.56431    
+diff_otu_moderare          3.751e-01  2.623e-02  14.297  < 2e-16 ***
+depth_mu                  -2.439e-05  2.553e-06  -9.556  < 2e-16 ***
+depth_theta               -5.435e-04  2.623e-03  -0.207  0.83596    
+covariate_eff_sd          -7.222e-02  4.280e-02  -1.687  0.09211 .  
+confounder_eff_sd          2.395e-01  4.280e-02   5.594 3.46e-08 ***
+depth_conf_factor          2.414e-01  4.280e-02   5.641 2.68e-08 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 0.2564 on 565 degrees of freedom
+  (2 observations deleted due to missingness)
+Multiple R-squared:  0.427,	Adjusted R-squared:  0.4189 
+F-statistic: 52.63 on 8 and 565 DF,  p-value: < 2.2e-16
+
+
+Transformation: Centered Logit Ratio 
+
+Call:
+lm(formula = mean_fdr ~ diff_otu_direct + diff_otu_mode + depth_mu + 
+    depth_theta + covariate_eff_sd + confounder_eff_sd + depth_conf_factor, 
+    data = subset_data)
+
+Residuals:
+     Min       1Q   Median       3Q      Max 
+-0.45297 -0.13479 -0.06164  0.14143  0.55194 
+
+Coefficients:
+                            Estimate Std. Error t value Pr(>|t|)    
+(Intercept)                1.122e-01  3.400e-02   3.301  0.00103 ** 
+diff_otu_directunbalanced  3.967e-02  1.857e-02   2.136  0.03308 *  
+diff_otu_modemix           4.730e-02  2.264e-02   2.089  0.03716 *  
+diff_otu_moderare          3.747e-01  2.280e-02  16.437  < 2e-16 ***
+depth_mu                  -2.644e-05  2.212e-06 -11.957  < 2e-16 ***
+depth_theta               -2.848e-04  2.276e-03  -0.125  0.90048    
+covariate_eff_sd          -7.150e-02  3.714e-02  -1.925  0.05467 .  
+confounder_eff_sd          1.635e-01  3.714e-02   4.403 1.28e-05 ***
+depth_conf_factor          6.659e-01  3.714e-02  17.928  < 2e-16 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 0.2218 on 562 degrees of freedom
+  (5 observations deleted due to missingness)
+Multiple R-squared:  0.5933,	Adjusted R-squared:  0.5875 
+F-statistic: 102.5 on 8 and 562 DF,  p-value: < 2.2e-16
+
+
+Transformation: Centered New Logit Ratio 
+
+Call:
+lm(formula = mean_fdr ~ diff_otu_direct + diff_otu_mode + depth_mu + 
+    depth_theta + covariate_eff_sd + confounder_eff_sd + depth_conf_factor, 
+    data = subset_data)
+
+Residuals:
+     Min       1Q   Median       3Q      Max 
+-0.48896 -0.09098 -0.00244  0.08984  0.71896 
+
+Coefficients:
+                            Estimate Std. Error t value Pr(>|t|)    
+(Intercept)                1.741e-01  2.699e-02   6.452 3.00e-10 ***
+diff_otu_directunbalanced  8.082e-02  1.460e-02   5.537 5.38e-08 ***
+diff_otu_modemix           7.275e-02  1.782e-02   4.084 5.30e-05 ***
+diff_otu_moderare          5.274e-01  1.785e-02  29.549  < 2e-16 ***
+depth_mu                  -6.433e-06  1.634e-06  -3.936 9.67e-05 ***
+depth_theta                2.092e-03  1.787e-03   1.170    0.243    
+covariate_eff_sd          -1.247e-01  2.919e-02  -4.271 2.40e-05 ***
+confounder_eff_sd          1.351e-01  2.919e-02   4.630 4.87e-06 ***
+depth_conf_factor          5.533e-03  2.919e-02   0.190    0.850    
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 0.1522 on 426 degrees of freedom
+  (141 observations deleted due to missingness)
+Multiple R-squared:  0.721,	Adjusted R-squared:  0.7157 
+F-statistic: 137.6 on 8 and 426 DF,  p-value: < 2.2e-16
+
+
+Transformation: Centered Power Ratio 
+
+Call:
+lm(formula = mean_fdr ~ diff_otu_direct + diff_otu_mode + depth_mu + 
+    depth_theta + covariate_eff_sd + confounder_eff_sd + depth_conf_factor, 
+    data = subset_data)
+
+Residuals:
+     Min       1Q   Median       3Q      Max 
+-0.59846 -0.17131 -0.02081  0.10715  0.67710 
+
+Coefficients:
+                            Estimate Std. Error t value Pr(>|t|)    
+(Intercept)                3.448e-01  3.883e-02   8.880  < 2e-16 ***
+diff_otu_directunbalanced  3.091e-02  2.132e-02   1.450    0.148    
+diff_otu_modemix          -1.322e-01  2.609e-02  -5.066 5.56e-07 ***
+diff_otu_moderare         -9.392e-03  2.620e-02  -0.359    0.720    
+depth_mu                   1.647e-05  2.601e-06   6.333 5.00e-10 ***
+depth_theta                3.472e-03  2.603e-03   1.334    0.183    
+covariate_eff_sd          -6.008e-02  4.264e-02  -1.409    0.159    
+confounder_eff_sd          6.541e-02  4.264e-02   1.534    0.126    
+depth_conf_factor          1.019e+00  4.270e-02  23.875  < 2e-16 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 0.2516 on 548 degrees of freedom
+  (19 observations deleted due to missingness)
+Multiple R-squared:  0.5484,	Adjusted R-squared:  0.5418 
+F-statistic: 83.17 on 8 and 548 DF,  p-value: < 2.2e-16
+
+
+Transformation: ILR 
+
+Call:
+lm(formula = mean_fdr ~ diff_otu_direct + diff_otu_mode + depth_mu + 
+    depth_theta + covariate_eff_sd + confounder_eff_sd + depth_conf_factor, 
+    data = subset_data)
+
+Residuals:
+     Min       1Q   Median       3Q      Max 
+-0.28455 -0.05159 -0.02286  0.04079  0.18552 
+
+Coefficients:
+                            Estimate Std. Error t value Pr(>|t|)    
+(Intercept)                7.025e-01  1.263e-02  55.631  < 2e-16 ***
+diff_otu_directunbalanced  8.657e-03  6.892e-03   1.256    0.210    
+diff_otu_modemix           1.679e-01  8.418e-03  19.941  < 2e-16 ***
+diff_otu_moderare          1.178e-01  8.452e-03  13.940  < 2e-16 ***
+depth_mu                  -4.631e-06  8.215e-07  -5.636 2.75e-08 ***
+depth_theta                4.400e-04  8.429e-04   0.522    0.602    
+covariate_eff_sd          -1.601e-02  1.378e-02  -1.161    0.246    
+confounder_eff_sd          1.802e-02  1.378e-02   1.308    0.192    
+depth_conf_factor          1.159e-01  1.378e-02   8.408 3.42e-16 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 0.08248 on 564 degrees of freedom
+  (3 observations deleted due to missingness)
+Multiple R-squared:  0.4831,	Adjusted R-squared:  0.4757 
+F-statistic: 65.89 on 8 and 564 DF,  p-value: < 2.2e-16
+
+
+Transformation: New Boxcox in Ratio 
+
+Call:
+lm(formula = mean_fdr ~ diff_otu_direct + diff_otu_mode + depth_mu + 
+    depth_theta + covariate_eff_sd + confounder_eff_sd + depth_conf_factor, 
+    data = subset_data)
+
+Residuals:
+     Min       1Q   Median       3Q      Max 
+-0.54320 -0.08263  0.00445  0.09011  0.41826 
+
+Coefficients:
+                            Estimate Std. Error t value Pr(>|t|)    
+(Intercept)                5.761e-02  2.191e-02   2.630 0.008778 ** 
+diff_otu_directunbalanced  3.431e-02  1.195e-02   2.871 0.004246 ** 
+diff_otu_modemix           8.903e-02  1.453e-02   6.125 1.71e-09 ***
+diff_otu_moderare          6.730e-01  1.470e-02  45.790  < 2e-16 ***
+depth_mu                  -1.098e-05  1.421e-06  -7.724 5.23e-14 ***
+depth_theta               -1.414e-03  1.465e-03  -0.965 0.334898    
+covariate_eff_sd          -8.974e-02  2.390e-02  -3.755 0.000192 ***
+confounder_eff_sd          1.452e-01  2.391e-02   6.074 2.31e-09 ***
+depth_conf_factor          1.551e-01  2.391e-02   6.487 1.93e-10 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 0.1424 on 559 degrees of freedom
+  (8 observations deleted due to missingness)
+Multiple R-squared:  0.8253,	Adjusted R-squared:  0.8228 
+F-statistic: 330.1 on 8 and 559 DF,  p-value: < 2.2e-16
+

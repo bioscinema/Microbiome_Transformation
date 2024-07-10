@@ -67,7 +67,7 @@ significant_results <- res %>%
   as.data.frame() %>%
   rownames_to_column("OTU") %>%
   filter(padj < 0.05)
-deseq2_significant <- as.vector(significant_results["OTU"])$OTU
+deseq2_significant <- NULL
 
 
 
@@ -173,9 +173,20 @@ g <- ggplot(plot_df, aes(x = Column, y = Reference, fill = Color)) +
        x = "Variables",
        y = "Variables",
        fill = "Legend") +
-  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1), aspect.ratio = 1)
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1), aspect.ratio = 1)+
+  theme(plot.title = element_text(size = 15, face = "bold"),
+        legend.title=element_text(size=15),
+        legend.text=element_text(size=13))+
+  theme(axis.line = element_line(colour = "black"),
+        panel.grid.major = element_blank(),
+        panel.border = element_blank(),
+        panel.background = element_blank(),
+        axis.line.x = element_line(color="black", size = 1),
+        axis.line.y = element_line(color="black", size = 1),
+        axis.text=element_text(size=15,face="bold"),
+        axis.title=element_text(size=15,face="bold"))
 plot_width <- 10
-plot_height <- 10
+plot_height <- 8
 ggsave(g, file = "Different_Reference_for_ALR_05_outlier.eps", device = "eps", width = plot_width, height = plot_height)
 
 ## Situation 2: replace 0 with 0.5, remove outliers
@@ -236,9 +247,21 @@ g <- ggplot(plot_df, aes(x = Column, y = Reference, fill = Color)) +
        x = "Variables",
        y = "Variables",
        fill = "Legend") +
-  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1), aspect.ratio = 1)
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1), aspect.ratio = 1)+
+  theme(plot.title = element_text(size = 15, face = "bold"),
+        legend.title=element_text(size=15),
+        legend.text=element_text(size=13))+
+  theme(axis.line = element_line(colour = "black"),
+        panel.grid.major = element_blank(),
+        panel.border = element_blank(),
+        panel.background = element_blank(),
+        axis.line.x = element_line(color="black", size = 1),
+        axis.line.y = element_line(color="black", size = 1),
+        axis.text=element_text(size=15,face="bold"),
+        axis.title=element_text(size=15,face="bold"))
 plot_width <- 10
-plot_height <- 10
+plot_height <- 8
+
 ggsave(g, file = "Different_Reference_for_ALR_05_no_outlier.eps", device = "eps", width = plot_width, height = plot_height)
 
 ## Situation 3: replace 0 with 1, without remove outliers
@@ -301,9 +324,20 @@ g <- ggplot(plot_df, aes(x = Column, y = Reference, fill = Color)) +
        x = "Variables",
        y = "Variables",
        fill = "Legend") +
-  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1), aspect.ratio = 1)
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1), aspect.ratio = 1)+
+  theme(plot.title = element_text(size = 15, face = "bold"),
+        legend.title=element_text(size=15),
+        legend.text=element_text(size=13))+
+  theme(axis.line = element_line(colour = "black"),
+        panel.grid.major = element_blank(),
+        panel.border = element_blank(),
+        panel.background = element_blank(),
+        axis.line.x = element_line(color="black", size = 1),
+        axis.line.y = element_line(color="black", size = 1),
+        axis.text=element_text(size=15,face="bold"),
+        axis.title=element_text(size=15,face="bold"))
 plot_width <- 10
-plot_height <- 10
+plot_height <- 8
 ggsave(g, file = "Different_Reference_for_ALR_1_outlier.eps", device = "eps", width = plot_width, height = plot_height)
 
 
@@ -366,7 +400,18 @@ g <- ggplot(plot_df, aes(x = Column, y = Reference, fill = Color)) +
        x = "Variables",
        y = "Variables",
        fill = "Legend") +
-  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1), aspect.ratio = 1)
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1), aspect.ratio = 1)+
+  theme(plot.title = element_text(size = 15, face = "bold"),
+        legend.title=element_text(size=15),
+        legend.text=element_text(size=13))+
+  theme(axis.line = element_line(colour = "black"),
+        panel.grid.major = element_blank(),
+        panel.border = element_blank(),
+        panel.background = element_blank(),
+        axis.line.x = element_line(color="black", size = 1),
+        axis.line.y = element_line(color="black", size = 1),
+        axis.text=element_text(size=15,face="bold"),
+        axis.title=element_text(size=15,face="bold"))
 plot_width <- 10
-plot_height <- 10
+plot_height <- 8
 ggsave(g, file = "Different_Reference_for_ALR_1_no_outlier.eps", device = "eps", width = plot_width, height = plot_height)
