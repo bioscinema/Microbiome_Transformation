@@ -48,34 +48,9 @@ remove_outliers <- function(df, group_col = "Group") {
 
 
 
-
-
-# Get significant by using deseq2
-otu_data <- as.data.frame(otu_table(physeq.tree))
-filtered_otu_data <- otu_data[, grepl("\\.MD", colnames(otu_data))]
-filtered_otu_data <- filter_rows(filtered_otu_data)
-sample_data <- as.data.frame(sample_data(physeq.tree))
-filtered_sample_data <- sample_data[grepl("\\.MD", rownames(sample_data)), ]
-dds <- DESeqDataSetFromMatrix(
-  countData = as.matrix(filtered_otu_data),
-  colData = filtered_sample_data,
-  design = ~ group
-)
-dds <- DESeq(dds)
-res <- results(dds)
-significant_results <- res %>%
-  as.data.frame() %>%
-  rownames_to_column("OTU") %>%
-  filter(padj < 0.05)
-deseq2_significant <- NULL
-
-
-
-
-
 # ALR Transformation
 alr_transformation <- function(data, group_factor = 1, ref_component) {
-  data <- replace_zeros(data)
+  
   factors <- as.vector(unique(data[[group_factor]]))
   group1 <- data[data[[group_factor]] == factors[1], -group_factor]
   group2 <- data[data[[group_factor]] == factors[2], -group_factor]
@@ -159,15 +134,12 @@ result_df$Reference <- 1:num_cols
 plot_df <- pivot_longer(result_df, cols = -Reference, names_to = "Column", values_to = "Color")
 plot_df$Column <- as.numeric(gsub("V", "", plot_df$Column))
 plot_df$Color <- factor(plot_df$Color, levels = c("white", "blue", "red"))
-values_to_annotate <- which(colnames(df) %in% deseq2_significant) - 1
-triangles_df_x <- data.frame(Column = values_to_annotate, Reference = rep(1, length(values_to_annotate)))
-triangles_df_y <- data.frame(Column = rep(1, length(values_to_annotate)), Reference = values_to_annotate)
+
+
 g <- ggplot(plot_df, aes(x = Column, y = Reference, fill = Color)) +
   geom_tile() +
   scale_fill_manual(values = c("white" = "white", "blue" = "blue", "red" = "red"),
                     labels = c("Non-Significant", "Reference", "Significant")) +
-  geom_point(data = triangles_df_x, aes(x = Column, y = Reference), shape = 17, color = "green", size = 1, inherit.aes = FALSE) +
-  geom_point(data = triangles_df_y, aes(x = Column, y = Reference), shape = 17, color = "green", size = 1, inherit.aes = FALSE) +
   theme_minimal() +
   labs(title = "Significant Columns by Reference Component for ALR Transformation",
        x = "Variables",
@@ -233,15 +205,12 @@ result_df$Reference <- 1:num_cols
 plot_df <- pivot_longer(result_df, cols = -Reference, names_to = "Column", values_to = "Color")
 plot_df$Column <- as.numeric(gsub("V", "", plot_df$Column))
 plot_df$Color <- factor(plot_df$Color, levels = c("white", "blue", "red"))
-values_to_annotate <- which(colnames(df) %in% deseq2_significant) - 1
-triangles_df_x <- data.frame(Column = values_to_annotate, Reference = rep(1, length(values_to_annotate)))
-triangles_df_y <- data.frame(Column = rep(1, length(values_to_annotate)), Reference = values_to_annotate)
+
+
 g <- ggplot(plot_df, aes(x = Column, y = Reference, fill = Color)) +
   geom_tile() +
   scale_fill_manual(values = c("white" = "white", "blue" = "blue", "red" = "red"),
                     labels = c("Non-Significant", "Reference", "Significant")) +
-  geom_point(data = triangles_df_x, aes(x = Column, y = Reference), shape = 17, color = "green", size = 1, inherit.aes = FALSE) +
-  geom_point(data = triangles_df_y, aes(x = Column, y = Reference), shape = 17, color = "green", size = 1, inherit.aes = FALSE) +
   theme_minimal() +
   labs(title = "Significant Columns by Reference Component for ALR Transformation",
        x = "Variables",
@@ -310,15 +279,10 @@ result_df$Reference <- 1:num_cols
 plot_df <- pivot_longer(result_df, cols = -Reference, names_to = "Column", values_to = "Color")
 plot_df$Column <- as.numeric(gsub("V", "", plot_df$Column))
 plot_df$Color <- factor(plot_df$Color, levels = c("white", "blue", "red"))
-values_to_annotate <- which(colnames(df) %in% deseq2_significant) - 1
-triangles_df_x <- data.frame(Column = values_to_annotate, Reference = rep(1, length(values_to_annotate)))
-triangles_df_y <- data.frame(Column = rep(1, length(values_to_annotate)), Reference = values_to_annotate)
 g <- ggplot(plot_df, aes(x = Column, y = Reference, fill = Color)) +
   geom_tile() +
   scale_fill_manual(values = c("white" = "white", "blue" = "blue", "red" = "red"),
                     labels = c("Non-Significant", "Reference", "Significant")) +
-  geom_point(data = triangles_df_x, aes(x = Column, y = Reference), shape = 17, color = "green", size = 1, inherit.aes = FALSE) +
-  geom_point(data = triangles_df_y, aes(x = Column, y = Reference), shape = 17, color = "green", size = 1, inherit.aes = FALSE) +
   theme_minimal() +
   labs(title = "Significant Columns by Reference Component for ALR Transformation",
        x = "Variables",
@@ -386,15 +350,10 @@ result_df$Reference <- 1:num_cols
 plot_df <- pivot_longer(result_df, cols = -Reference, names_to = "Column", values_to = "Color")
 plot_df$Column <- as.numeric(gsub("V", "", plot_df$Column))
 plot_df$Color <- factor(plot_df$Color, levels = c("white", "blue", "red"))
-values_to_annotate <- which(colnames(df) %in% deseq2_significant) - 1
-triangles_df_x <- data.frame(Column = values_to_annotate, Reference = rep(1, length(values_to_annotate)))
-triangles_df_y <- data.frame(Column = rep(1, length(values_to_annotate)), Reference = values_to_annotate)
 g <- ggplot(plot_df, aes(x = Column, y = Reference, fill = Color)) +
   geom_tile() +
   scale_fill_manual(values = c("white" = "white", "blue" = "blue", "red" = "red"),
                     labels = c("Non-Significant", "Reference", "Significant")) +
-  geom_point(data = triangles_df_x, aes(x = Column, y = Reference), shape = 17, color = "green", size = 1, inherit.aes = FALSE) +
-  geom_point(data = triangles_df_y, aes(x = Column, y = Reference), shape = 17, color = "green", size = 1, inherit.aes = FALSE) +
   theme_minimal() +
   labs(title = "Significant Columns by Reference Component for ALR Transformation",
        x = "Variables",

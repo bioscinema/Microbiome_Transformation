@@ -280,3 +280,66 @@ combined_plot <- arrangeGrob(
 
 # Save the combined plot as EPS
 ggsave("variance_and_outliers.eps", plot = combined_plot, device = "eps", width = 12, height = 5)
+
+
+
+
+
+
+
+
+create_line_plot_with_errorbars <- function(df_no_outliers, df_outliers, y_var, se_var, y_label, file_name) {
+  p <- ggplot() +
+    # No outliers
+    geom_line(data = df_no_outliers, aes(x = beta0, y = df_no_outliers[[y_var]]), color = "blue") +
+    geom_errorbar(data = df_no_outliers, aes(x = beta0, ymin = df_no_outliers[[y_var]] - df_no_outliers[[se_var]], ymax = df_no_outliers[[y_var]] + df_no_outliers[[se_var]]), width = 0.02, color = "blue") +
+    # Outliers
+    geom_line(data = df_outliers, aes(x = beta0, y = df_outliers[[y_var]]), color = "red") +
+    geom_errorbar(data = df_outliers, aes(x = beta0, ymin = df_outliers[[y_var]] - df_outliers[[se_var]], ymax = df_outliers[[y_var]] + df_outliers[[se_var]]), width = 0.02, color = "red") +
+    labs(x = expression(beta[0]), y = "Intercept") +
+    theme_minimal() +
+    ggtitle(paste(y_label, "Intercept with Standard Error")) +
+    theme(plot.title = element_text(hjust = 0.5, size = 27, face = "bold"),
+          axis.line = element_line(colour = "black"),
+          panel.grid.major = element_blank(),
+          panel.border = element_blank(),
+          panel.background = element_blank(),
+          axis.line.x = element_line(color = "black", size = 0.6),
+          axis.line.y = element_line(color = "black", size = 0.6),
+          axis.text = element_text(size = 15, face = "bold"),
+          axis.title = element_text(size = 20, face = "bold"),
+          legend.position = "none") +
+    scale_y_continuous(limits = c(-2.2, 2))
+  
+  # Save the plot as EPS
+  ggsave(paste0(file_name, ".eps"), plot = p, device = "eps", width = 8, height = 6)
+}
+
+# Function to extract and save the legend
+extract_and_save_legend <- function() {
+  p <- ggplot() +
+    geom_line(data = results_no_outlier, aes(x = beta0, y = estimated_intercept_orig, color = "No Outliers")) +
+    geom_line(data = results_outlier, aes(x = beta0, y = estimated_intercept_orig, color = "Outliers")) +
+    scale_color_manual(name = "Legend", values = c("No Outliers" = "blue", "Outliers" = "red")) +
+    theme_minimal() +
+    theme(legend.position = "right", legend.text = element_text(size = 40), 
+          legend.title = element_text(size = 40, face = "bold"))
+  
+  legend <- cowplot::get_legend(p)
+  legend_plot <- cowplot::plot_grid(legend, ncol = 1)
+  
+  # Save the legend as EPS
+  ggsave("legend.eps", plot = legend_plot, device = "eps", width = 6, height = 6)
+}
+
+# Creating and saving the plots
+transformations <- c("estimated_intercept_orig", "estimated_intercept_log", "estimated_intercept_logit", "estimated_intercept_arcsine", "estimated_intercept_boxcox")
+se_vars <- c("se_orig", "se_log", "se_logit", "se_arcsine", "se_boxcox")
+labels <- c("Original", "Log", "Logit", "Arcsine", "Box-Cox")
+
+for (i in seq_along(transformations)) {
+  create_line_plot_with_errorbars(results_no_outlier, results_outlier, transformations[i], se_vars[i], labels[i], labels[i])
+}
+
+# Extract and save the legend
+extract_and_save_legend()
