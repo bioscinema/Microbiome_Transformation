@@ -46,7 +46,7 @@ generate_data <- function(n = 100, p = 500, beta0 = 5, beta = 1, alpha = 3, q = 
   
   X <- cbind(xn, xz)
   
-  pi <- replicate(p, 1 - rbinom(n, 1, q))
+  pi <- replicate(p, rbinom(n, 1, 1 - q))
   Xc <- matrix(, n, p)
   for (j in 1:p) {
     Xc[, j] <- X[, j] * pi[, j]
