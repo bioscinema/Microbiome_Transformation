@@ -17,7 +17,7 @@ replace_zeros <- function(data, replace_value = 0.5) {
 
 filter_rows <- function(data) {
   filtered_data <- data[apply(data, 1, function(row) {
-    sum(row != 0) >= 5
+    sum(row != 0) >= 7
   }), ]
   return(filtered_data)
 }
@@ -141,7 +141,7 @@ g <- ggplot(plot_df, aes(x = Column, y = Reference, fill = Color)) +
   scale_fill_manual(values = c("white" = "white", "blue" = "blue", "red" = "red"),
                     labels = c("Non-Significant", "Reference", "Significant")) +
   theme_minimal() +
-  labs(title = "Significant Columns by Reference Component for ALR Transformation",
+  labs(
        x = "Variables",
        y = "Variables",
        fill = "Legend") +
@@ -212,7 +212,7 @@ g <- ggplot(plot_df, aes(x = Column, y = Reference, fill = Color)) +
   scale_fill_manual(values = c("white" = "white", "blue" = "blue", "red" = "red"),
                     labels = c("Non-Significant", "Reference", "Significant")) +
   theme_minimal() +
-  labs(title = "Significant Columns by Reference Component for ALR Transformation",
+  labs(
        x = "Variables",
        y = "Variables",
        fill = "Legend") +
@@ -284,7 +284,7 @@ g <- ggplot(plot_df, aes(x = Column, y = Reference, fill = Color)) +
   scale_fill_manual(values = c("white" = "white", "blue" = "blue", "red" = "red"),
                     labels = c("Non-Significant", "Reference", "Significant")) +
   theme_minimal() +
-  labs(title = "Significant Columns by Reference Component for ALR Transformation",
+  labs(
        x = "Variables",
        y = "Variables",
        fill = "Legend") +
@@ -355,7 +355,7 @@ g <- ggplot(plot_df, aes(x = Column, y = Reference, fill = Color)) +
   scale_fill_manual(values = c("white" = "white", "blue" = "blue", "red" = "red"),
                     labels = c("Non-Significant", "Reference", "Significant")) +
   theme_minimal() +
-  labs(title = "Significant Columns by Reference Component for ALR Transformation",
+  labs(
        x = "Variables",
        y = "Variables",
        fill = "Legend") +

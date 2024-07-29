@@ -51,7 +51,7 @@ for (beta0 in beta0_values) {
   lambda_boxcox <- numeric(num_simulations)
   for (i in 1:num_simulations) {
     # Generate original data
-    epsilon <- runif(n, -0.15, 0.15)
+    epsilon <- runif(n, -0.18, 0.18)
     y_orig <- beta0 + epsilon
     
     # Fit models
@@ -100,12 +100,14 @@ for (beta0 in beta0_values) {
   lambda_values_no_outlier[[as.character(beta0)]] <- lambda_boxcox
 }
 
-n <- 100 # Increased sample size due to outliers
+
+# With outlier in the right(larger outlier)
+n <- 100 
 num_simulations <- 100000
 beta0_values <- c(0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8)
 outliers <- c(0.9, 0.99, 0.999, 0.9999, 0.99999, 0.99999)
 
-results_outlier <- data.frame( 
+results_outlier_right <- data.frame( 
   beta0 = numeric(),
   estimated_intercept_orig = numeric(),
   se_orig = numeric(),
@@ -129,7 +131,7 @@ for (beta0 in beta0_values) {
   
   for (i in 1:num_simulations) {
     # Generate original data
-    epsilon <- runif(n - length(outliers), -0.15, 0.15)
+    epsilon <- runif(n - length(outliers), -0.18, 0.18)
     y_orig <- c(beta0 + epsilon, outliers)
     
     # Fit models
@@ -161,7 +163,7 @@ for (beta0 in beta0_values) {
   se_boxcox <- sd(intercept_boxcox)
   
   # Append results to data frame
-  results_outlier <- rbind(results_outlier, data.frame(
+  results_outlier_right <- rbind(results_outlier_right, data.frame(
     beta0 = beta0,
     estimated_intercept_orig = mean_orig,
     se_orig = se_orig,
@@ -175,6 +177,87 @@ for (beta0 in beta0_values) {
     se_boxcox = se_boxcox
   ))
 }
+
+
+# With outlier in the left(smaller outlier)
+n <- 100 
+num_simulations <- 100000
+beta0_values <- c(0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8)
+outliers <- c(0.1, 0.01, 0.001, 0.0001, 0.00001, 0.000001)
+
+results_outlier_left <- data.frame( 
+  beta0 = numeric(),
+  estimated_intercept_orig = numeric(),
+  se_orig = numeric(),
+  estimated_intercept_log = numeric(),
+  se_log = numeric(),
+  estimated_intercept_logit = numeric(),
+  se_logit = numeric(),
+  estimated_intercept_arcsine = numeric(),
+  se_arcsine = numeric(),
+  estimated_intercept_boxcox = numeric(),
+  se_boxcox = numeric()
+)
+
+# Perform simulations
+for (beta0 in beta0_values) {
+  intercept_orig <- numeric(num_simulations)
+  intercept_log <- numeric(num_simulations)
+  intercept_logit <- numeric(num_simulations)
+  intercept_arcsine <- numeric(num_simulations)
+  intercept_boxcox <- numeric(num_simulations)
+  
+  for (i in 1:num_simulations) {
+    # Generate original data
+    epsilon <- runif(n - length(outliers), -0.18, 0.18)
+    y_orig <- c(beta0 + epsilon, outliers)
+    
+    # Fit models
+    fit_orig <- lm(y_orig ~ 1)
+    fit_log <- lm(log(y_orig) ~ 1)
+    fit_logit <- lm(logit(y_orig) ~ 1)
+    fit_arcsine <- lm(arcsine_transform(y_orig) ~ 1)
+    y_boxcox <- boxcox_transform(y_orig)
+    fit_boxcox <- lm(y_boxcox$transformed ~ 1)
+    
+    # Store intercept estimates
+    intercept_orig[i] <- coef(fit_orig)[1]
+    intercept_log[i] <- coef(fit_log)[1]
+    intercept_logit[i] <- coef(fit_logit)[1]
+    intercept_arcsine[i] <- coef(fit_arcsine)[1]
+    intercept_boxcox[i] <- coef(fit_boxcox)[1]
+  }
+  
+  # Compute mean and standard error of intercept estimates
+  mean_orig <- mean(intercept_orig)
+  se_orig <- sd(intercept_orig)
+  mean_log <- mean(intercept_log)
+  se_log <- sd(intercept_log)
+  mean_logit <- mean(intercept_logit)
+  se_logit <- sd(intercept_logit)
+  mean_arcsine <- mean(intercept_arcsine)
+  se_arcsine <- sd(intercept_arcsine)
+  mean_boxcox <- mean(intercept_boxcox)
+  se_boxcox <- sd(intercept_boxcox)
+  
+  # Append results to data frame
+  results_outlier_left <- rbind(results_outlier_left, data.frame(
+    beta0 = beta0,
+    estimated_intercept_orig = mean_orig,
+    se_orig = se_orig,
+    estimated_intercept_log = mean_log,
+    se_log = se_log,
+    estimated_intercept_logit = mean_logit,
+    se_logit = se_logit,
+    estimated_intercept_arcsine = mean_arcsine,
+    se_arcsine = se_arcsine,
+    estimated_intercept_boxcox = mean_boxcox,
+    se_boxcox = se_boxcox
+  ))
+}
+
+
+
 
 library(ggplot2)
 library(reshape2)
@@ -226,12 +309,16 @@ create_line_plot_with_errorbars <- function(df, y_var, y_label, se_var, title = 
 intercept_y_limits <- range(c(
   results_no_outlier$estimated_intercept_orig - results_no_outlier$se_orig, results_no_outlier$estimated_intercept_log - results_no_outlier$se_log,
   results_no_outlier$estimated_intercept_logit - results_no_outlier$se_logit, results_no_outlier$estimated_intercept_arcsine - results_no_outlier$se_arcsine, results_no_outlier$estimated_intercept_boxcox - results_no_outlier$se_boxcox,
-  results_outlier$estimated_intercept_orig - results_outlier$se_orig, results_outlier$estimated_intercept_log - results_outlier$se_log,
-  results_outlier$estimated_intercept_logit - results_outlier$se_logit, results_outlier$estimated_intercept_arcsine - results_outlier$se_arcsine, results_outlier$estimated_intercept_boxcox - results_outlier$se_boxcox,
+  results_outlier_right$estimated_intercept_orig - results_outlier_right$se_orig, results_outlier_right$estimated_intercept_log - results_outlier_right$se_log,
+  results_outlier_right$estimated_intercept_logit - results_outlier_right$se_logit, results_outlier_right$estimated_intercept_arcsine - results_outlier_right$se_arcsine, results_outlier_right$estimated_intercept_boxcox - results_outlier_right$se_boxcox,
+  results_outlier_left$estimated_intercept_orig - results_outlier_left$se_orig, results_outlier_left$estimated_intercept_log - results_outlier_left$se_log,
+  results_outlier_left$estimated_intercept_logit - results_outlier_left$se_logit, results_outlier_left$estimated_intercept_arcsine - results_outlier_left$se_arcsine, results_outlier_left$estimated_intercept_boxcox - results_outlier_left$se_boxcox,
   results_no_outlier$estimated_intercept_orig + results_no_outlier$se_orig, results_no_outlier$estimated_intercept_log + results_no_outlier$se_log,
   results_no_outlier$estimated_intercept_logit + results_no_outlier$se_logit, results_no_outlier$estimated_intercept_arcsine + results_no_outlier$se_arcsine, results_no_outlier$estimated_intercept_boxcox + results_no_outlier$se_boxcox,
-  results_outlier$estimated_intercept_orig + results_outlier$se_orig, results_outlier$estimated_intercept_log + results_outlier$se_log,
-  results_outlier$estimated_intercept_logit + results_outlier$se_logit, results_outlier$estimated_intercept_arcsine + results_outlier$se_arcsine, results_outlier$estimated_intercept_boxcox + results_outlier$se_boxcox
+  results_outlier_right$estimated_intercept_orig + results_outlier_right$se_orig, results_outlier_right$estimated_intercept_log + results_outlier_right$se_log,
+  results_outlier_right$estimated_intercept_logit + results_outlier_right$se_logit, results_outlier_right$estimated_intercept_arcsine + results_outlier_right$se_arcsine, results_outlier_right$estimated_intercept_boxcox + results_outlier_right$se_boxcox,
+  results_outlier_left$estimated_intercept_orig + results_outlier_left$se_orig, results_outlier_left$estimated_intercept_log + results_outlier_left$se_log,
+  results_outlier_left$estimated_intercept_logit + results_outlier_left$se_logit, results_outlier_left$estimated_intercept_arcsine + results_outlier_left$se_arcsine, results_outlier_left$estimated_intercept_boxcox + results_outlier_left$se_boxcox
 ))
 
 # Extract intercept values for beta0 = 0.2 and beta0 = 0.8 from no outlier data
@@ -250,7 +337,13 @@ hlines <- list(
 
 # Create plots for intercept with error bars and horizontal lines
 plot_intercept_no_outlier <- create_line_plot_with_errorbars(results_no_outlier, c("estimated_intercept_orig", "estimated_intercept_log", "estimated_intercept_logit", "estimated_intercept_arcsine", "estimated_intercept_boxcox"), "Intercept", c("se_orig", "se_log", "se_logit", "se_arcsine", "se_boxcox"), "No Outliers", show_legend = TRUE, y_limits = intercept_y_limits, hlines = hlines)
-plot_intercept_outlier <- create_line_plot_with_errorbars(results_outlier, c("estimated_intercept_orig", "estimated_intercept_log", "estimated_intercept_logit", "estimated_intercept_arcsine", "estimated_intercept_boxcox"), NULL, c("se_orig", "se_log", "se_logit", "se_arcsine", "se_boxcox"), "Outliers", show_legend = FALSE, y_limits = intercept_y_limits, hlines = hlines) +
+plot_intercept_outlier_right <- create_line_plot_with_errorbars(results_outlier_right, c("estimated_intercept_orig", "estimated_intercept_log", "estimated_intercept_logit", "estimated_intercept_arcsine", "estimated_intercept_boxcox"), NULL, c("se_orig", "se_log", "se_logit", "se_arcsine", "se_boxcox"), "Right Outliers", show_legend = FALSE, y_limits = intercept_y_limits, hlines = hlines) +
+  theme(axis.title.y = element_blank(),
+        axis.text.y = element_blank(),
+        axis.ticks.y = element_blank(),
+        plot.margin = margin(5, 15, 5, 5))
+
+plot_intercept_outlier_left <- create_line_plot_with_errorbars(results_outlier_left, c("estimated_intercept_orig", "estimated_intercept_log", "estimated_intercept_logit", "estimated_intercept_arcsine", "estimated_intercept_boxcox"), NULL, c("se_orig", "se_log", "se_logit", "se_arcsine", "se_boxcox"), "Left Outliers", show_legend = FALSE, y_limits = intercept_y_limits, hlines = hlines) +
   theme(axis.title.y = element_blank(),
         axis.text.y = element_blank(),
         axis.ticks.y = element_blank(),
@@ -269,77 +362,15 @@ legend <- get_legend(plot_intercept_no_outlier)
 # Combine the plots and the legend in a grid layout
 combined_plot <- arrangeGrob(
   arrangeGrob(plot_intercept_no_outlier + theme(legend.position = "none", plot.margin = margin(6, 0, 6, 6)), 
-              plot_intercept_outlier + theme(legend.position = "none", plot.margin = margin(6, 6, 6, 0)), 
-              nrow = 1, ncol = 2),
+              plot_intercept_outlier_right + theme(legend.position = "none", plot.margin = margin(6, 6, 6, 0)),
+              plot_intercept_outlier_left + theme(legend.position = "none", plot.margin = margin(6, 6, 6, 0)),
+              nrow = 1, ncol = 3),
   legend,
   nrow = 1,
   top = textGrob("Intercept Estimates with Standard Error for Different Conditions", gp = gpar(fontsize = 11, fontface = "bold")),
-  layout_matrix = rbind(c(1, 1, 2)),
-  widths = c(1, 1, 0.3)
+  layout_matrix = rbind(c(1, 1, 1, 2)),
+  widths = c(1, 1, 1, 0.3)
 )
 
 # Save the combined plot as EPS
 ggsave("variance_and_outliers.eps", plot = combined_plot, device = "eps", width = 12, height = 5)
-
-
-
-
-
-
-
-
-create_line_plot_with_errorbars <- function(df_no_outliers, df_outliers, y_var, se_var, y_label, file_name) {
-  p <- ggplot() +
-    # No outliers
-    geom_line(data = df_no_outliers, aes(x = beta0, y = df_no_outliers[[y_var]]), color = "blue") +
-    geom_errorbar(data = df_no_outliers, aes(x = beta0, ymin = df_no_outliers[[y_var]] - df_no_outliers[[se_var]], ymax = df_no_outliers[[y_var]] + df_no_outliers[[se_var]]), width = 0.02, color = "blue") +
-    # Outliers
-    geom_line(data = df_outliers, aes(x = beta0, y = df_outliers[[y_var]]), color = "red") +
-    geom_errorbar(data = df_outliers, aes(x = beta0, ymin = df_outliers[[y_var]] - df_outliers[[se_var]], ymax = df_outliers[[y_var]] + df_outliers[[se_var]]), width = 0.02, color = "red") +
-    labs(x = expression(beta[0]), y = "Intercept") +
-    theme_minimal() +
-    ggtitle(paste(y_label, "Intercept with Standard Error")) +
-    theme(plot.title = element_text(hjust = 0.5, size = 27, face = "bold"),
-          axis.line = element_line(colour = "black"),
-          panel.grid.major = element_blank(),
-          panel.border = element_blank(),
-          panel.background = element_blank(),
-          axis.line.x = element_line(color = "black", size = 0.6),
-          axis.line.y = element_line(color = "black", size = 0.6),
-          axis.text = element_text(size = 15, face = "bold"),
-          axis.title = element_text(size = 20, face = "bold"),
-          legend.position = "none") +
-    scale_y_continuous(limits = c(-2.2, 2))
-  
-  # Save the plot as EPS
-  ggsave(paste0(file_name, ".eps"), plot = p, device = "eps", width = 8, height = 6)
-}
-
-# Function to extract and save the legend
-extract_and_save_legend <- function() {
-  p <- ggplot() +
-    geom_line(data = results_no_outlier, aes(x = beta0, y = estimated_intercept_orig, color = "No Outliers")) +
-    geom_line(data = results_outlier, aes(x = beta0, y = estimated_intercept_orig, color = "Outliers")) +
-    scale_color_manual(name = "Legend", values = c("No Outliers" = "blue", "Outliers" = "red")) +
-    theme_minimal() +
-    theme(legend.position = "right", legend.text = element_text(size = 40), 
-          legend.title = element_text(size = 40, face = "bold"))
-  
-  legend <- cowplot::get_legend(p)
-  legend_plot <- cowplot::plot_grid(legend, ncol = 1)
-  
-  # Save the legend as EPS
-  ggsave("legend.eps", plot = legend_plot, device = "eps", width = 6, height = 6)
-}
-
-# Creating and saving the plots
-transformations <- c("estimated_intercept_orig", "estimated_intercept_log", "estimated_intercept_logit", "estimated_intercept_arcsine", "estimated_intercept_boxcox")
-se_vars <- c("se_orig", "se_log", "se_logit", "se_arcsine", "se_boxcox")
-labels <- c("Original", "Log", "Logit", "Arcsine", "Box-Cox")
-
-for (i in seq_along(transformations)) {
-  create_line_plot_with_errorbars(results_no_outlier, results_outlier, transformations[i], se_vars[i], labels[i], labels[i])
-}
-
-# Extract and save the legend
-extract_and_save_legend()
