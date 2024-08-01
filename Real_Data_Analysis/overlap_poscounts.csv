@@ -1,0 +1,16 @@
+"Transformation","Overlap","DESeq2_Only","T_Test_Only"
+"ALR",0,6,27
+"CLR",3,3,74
+"Additive Power Contrast",0,6,0
+"Centered Power Contrast",0,6,11
+"Additive Logit Contrast",0,6,27
+"Centered Logit Contrast",3,3,74
+"Additive Arcsine Contrast",0,6,11
+"Centered Arcsine Contrast",3,3,70
+"Additive Dual Group Logit Contrast",0,6,3
+"Centered Dual Group Logit Contrast",1,5,26
+"Additive Dual Group Power Contrast",0,6,0
+"Centered Dual Group Power Contrast",0,6,2
+"ILR",0,6,54
+"Boxcox in Ratio - William",0,6,23
+"Dual Group Boxcox in Ratio",0,6,25
