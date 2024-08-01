@@ -25,7 +25,7 @@ dds <- DESeqDataSetFromMatrix(
   colData = sample_metadata,
   design = ~ diagnosis
 )
-dds <- estimateSizeFactors(dds, type = "poscounts")
+#dds <- estimateSizeFactors(dds, type = "poscounts")
 dds <- DESeq(dds)
 res <- results(dds)
 significant_results <- res %>%
@@ -58,11 +58,6 @@ deseq2_significant_poscount <- as.vector(significant_results["OTU"])$OTU
 deseq2_significant_poscount
 
 
-
-replace_zeros <- function(df, constant = 0.5) {
-  df[df == 0] <- constant
-  return(df)
-}
 
 
 alr_transformation <- function(data, group_factor = 1, ref_component = ncol(data)-1) {
@@ -355,7 +350,77 @@ new_logit_clr_transformation <- function(data, group_factor = 1){
 }
 
 
+library(dplyr)
+otu_data <- data.frame(filter_rows(otu_table(phy1)))
+t_otu_data = data.frame(t(otu_data))
+t_otu_data$Group <- sample_metadata$diagnosis
+t_otu_data = t_otu_data %>%
+  dplyr::select(Group, everything())
 
+otu_data <- data.frame(filter_rows(otu_table(phy1)))
+totu_data = t(otu_data)
+totu_data = data.frame("Group" = sample_metadata[["diagnosis"]], totu_data)
+generated_data <- totu_data
+
+# Apply Wilcoxon test for each column
+wilcoxon_results <- sapply(colnames(generated_data)[-1], function(col) {
+  wilcox.test(generated_data[[col]] ~ generated_data$Group)$p.value
+})
+
+# Apply Mann-Whitney U test for each column
+mann_whitney_results <- sapply(colnames(generated_data)[-1], function(col) {
+  wilcox.test(generated_data[[col]] ~ generated_data$Group, exact = FALSE)$p.value
+})
+
+# Apply Kruskal-Wallis test for each column
+kruskal_results <- sapply(colnames(generated_data)[-1], function(col) {
+  kruskal.test(generated_data[[col]] ~ generated_data$Group)$p.value
+})
+
+# Apply permutation test for each column
+
+
+# Apply Kolmogorov-Smirnov test for each column
+ks_results <- sapply(colnames(generated_data)[-1], function(col) {
+  ks.test(generated_data[[col]][generated_data$Group == "A"], generated_data[[col]][generated_data$Group == "B"])$p.value
+})
+
+# Combine results into a dataframe
+test_results <- data.frame(
+  Column = colnames(generated_data)[-1],
+  Wilcoxon = wilcoxon_results,
+  Mann_Whitney = mann_whitney_results,
+  Kruskal = kruskal_results,
+  Kolmogorov_Smirnov = ks_results
+)
+
+# Identify the column with the highest p-value in any test
+max_p_values <- apply(test_results[-1], 1, max)
+most_non_significant_column <- test_results$Column[which.max(max_p_values)]
+
+# Print the most non-significant column and its p-values
+most_non_significant_results <- test_results[test_results$Column == most_non_significant_column, ]
+
+# Result list
+results <- list(
+  most_non_significant_column = most_non_significant_column,
+  most_non_significant_results = most_non_significant_results,
+  test_results = test_results
+)
+
+col_names <- colnames(t_otu_data)
+
+# Identify the columns to switch
+col_196 <- col_names[196]
+col_last <- col_names[length(col_names)]
+
+# Reorder the columns to switch the 196th and the last columns
+col_names_switched <- col_names
+col_names_switched[196] <- col_last
+col_names_switched[length(col_names)] <- col_196
+
+# Reorder the dataframe
+t_otu_data <- t_otu_data[, col_names_switched]
 
 
 transformation_functions <- list(
@@ -397,7 +462,6 @@ perform_t_test <- function(data) {
   return(adjusted_p_values)
 }
 
-# Perform the Wilcoxon test on the original data
 
 # Initialize a list to store results for each transformation
 results <- list()
@@ -448,4 +512,57 @@ results_df[,1] = unlist(results_df[,1])
 # Display the results dataframe
 print(results_df)
 
-write.csv(results_df,"overlap.csv", row.names = FALSE)
+write.csv(results_df,"overlap_replace1.csv", row.names = FALSE)
+
+
+
+# Initialize a list to store results for each transformation
+results <- list()
+
+# Loop through each transformation, apply it, and calculate the overlap and differences
+for (transformation_name in names(transformation_functions)) {
+  
+  # Apply the transformation
+  transformed_data <- transformation_functions[[transformation_name]](t_otu_data)
+  
+  # Perform the t-test on the transformed data
+  t_test_results <- perform_t_test(transformed_data)
+  
+  # Determine significance based on adjusted p-value < 0.05
+  t_test_significant <- colnames(transformed_data)[t_test_results < 0.05]
+  
+  # Calculate overlap
+  overlap <- length(intersect(deseq2_significant_poscount, t_test_significant))
+  
+  # Calculate differences
+  deseq2_only <- length(setdiff(deseq2_significant_poscount, t_test_significant))
+  t_test_only <- length(setdiff(t_test_significant, deseq2_significant_poscount))
+  
+  # Store the results
+  results[[transformation_name]] <- list(
+    overlap = overlap,
+    deseq2_only = deseq2_only,
+    t_test_only = t_test_only
+  )
+}
+
+# Convert results to a dataframe
+results_df <- do.call(rbind, lapply(names(results), function(name) {
+  c(Transformation = name, results[[name]])
+}))
+
+# Convert the list to a data frame
+results_df <- as.data.frame(results_df, stringsAsFactors = FALSE)
+
+# Convert numerical columns to numeric type
+results_df$overlap <- as.numeric(results_df$overlap)
+results_df$deseq2_only <- as.numeric(results_df$deseq2_only)
+results_df$t_test_only <- as.numeric(results_df$t_test_only)
+
+# Rename the columns for clarity
+colnames(results_df) <- c("Transformation", "Overlap", "DESeq2_Only", "T_Test_Only")
+results_df[,1] = unlist(results_df[,1])
+# Display the results dataframe
+print(results_df)
+
+write.csv(results_df,"overlap_poscount.csv", row.names = FALSE)
