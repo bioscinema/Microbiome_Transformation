@@ -1,1 +1,1 @@
-# Review and Revamp of Microbiome Data Scaling and Compositional Data Transformation: A New Framework Combining Proportion Normalization and Contrast Transformation
+This repository contains the code for the paper: **"Review and Revamp of Microbiome Data Scaling and Compositional Data Transformation: A New Framework Combining Proportion Normalization and Contrast Transformation."**
